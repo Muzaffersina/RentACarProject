@@ -54,17 +54,17 @@ public class CarsController {
 		return this.carService.getAll();
 	}
 
-	@PostMapping("/getAllPaged")
+	@GetMapping("/getAllPaged")
 	public DataResult<List<ListCarDto>> getAllPaged(int pageNo, int pageSize) {
 		return this.carService.getAllPaged(pageNo, pageSize);
 	}
 
-	@PostMapping("/getAllSorted")
+	@GetMapping("/getAllSorted")
 	public DataResult<List<ListCarDto>> getAllSorted(Sort.Direction direction) {
 		return this.carService.getAllSorted(direction);
 	}
 
-	@PostMapping("/getByDailyPriceLessThanEqual")
+	@GetMapping("/getByDailyPriceLessThanEqual")
 	public DataResult<List<ListCarDto>> getByDailyPriceLessThanEqual(double dailyPrice) {
 		return this.carService.getByDailyPriceLessThanEqual(dailyPrice);
 	}

@@ -59,19 +59,19 @@ public class RentalsController {
 		return this.rentService.getAll();
 	}
 	
-	@PostMapping("/getAllPaged")
+	@GetMapping("/getAllPaged")
 	public DataResult<List<ListRentDto>> getAllPaged(int pageNo, int pageSize) {
 		return this.rentService.getAllPaged(pageNo, pageSize);
 	}
 
-	@PostMapping("/getAllSorted")
+	@GetMapping("/getAllSorted")
 	public DataResult<List<ListRentDto>> getAllSorted(Sort.Direction direction) {
 		return this.rentService.getAllSorted(direction);
 	}
 
 	@GetMapping("/getRentId")
-	public DataResult<GetListRentDto> getByCarMaintenanceId(int carMaintenanceId)  {
-		return this.rentService.getByRentId(carMaintenanceId);
+	public DataResult<GetListRentDto> getByRentalId(int rentalId)  {
+		return this.rentService.getByRentId(rentalId);
 	}
 
 	@GetMapping("/getByCarCarId")

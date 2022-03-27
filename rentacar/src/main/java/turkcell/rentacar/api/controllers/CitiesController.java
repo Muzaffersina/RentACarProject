@@ -57,12 +57,12 @@ public class CitiesController {
 		return this.cityService.getAll();
 	}
 
-	@PostMapping("/getAllPaged")
+	@GetMapping("/getAllPaged")
 	public DataResult<List<ListCityDto>> getAllPaged(int pageNo, int pageSize) {
 		return this.cityService.getAllPaged(pageNo, pageSize);
 	}
 
-	@PostMapping("/getAllSorted")
+	@GetMapping("/getAllSorted")
 	public DataResult<List<ListCityDto>> getAllSorted(Sort.Direction direction) {
 		return this.cityService.getAllSorted(direction);
 	}

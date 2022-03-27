@@ -53,7 +53,7 @@ public class CarDamageController {
 		return this.carDamageService.getAll();
 	}
 
-	@PostMapping("/getAllPaged")
+	@GetMapping("/getAllPaged")
 	public DataResult<List<ListCarDamageDto>> getAllPaged(int pageNo, int pageSize) {
 		return this.carDamageService.getAllPaged(pageNo, pageSize);
 	}

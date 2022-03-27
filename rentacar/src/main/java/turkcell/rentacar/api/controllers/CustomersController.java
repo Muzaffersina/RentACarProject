@@ -28,7 +28,7 @@ public class CustomersController {
 
 	}
 
-	@GetMapping("/get")
+	@GetMapping("/getByCustomerId")
 	DataResult<ListCustomerDto> getById( int id) {
 		return this.customerService.getById(id);		
 	}

@@ -166,7 +166,7 @@ public class RentalManager implements RentalService {
 				.map(rent -> this.modelMapperService.forDto().map(rent, ListRentDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListRentDto>>(Messages.RENTALLIST);
+		return new SuccessDataResult<List<ListRentDto>>(response, Messages.RENTALLIST);
 	}
 
 	@Override

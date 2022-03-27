@@ -45,7 +45,7 @@ public class PaymentsController {
 		return this.paymentService.getAll();
 	}
 
-	@PostMapping("/getAllPaged")
+	@GetMapping("/getAllPaged")
 	public DataResult<List<ListPaymentDto>> getAllPaged(int pageNo, int pageSize) {
 		return this.paymentService.getAllPaged(pageNo, pageSize);
 	}

@@ -54,12 +54,12 @@ public class ColorsController {
 		return this.colorService.getAll();
 	}
 
-	@PostMapping("/getAllPaged")
+	@GetMapping("/getAllPaged")
 	public DataResult<List<ListColorDto>> getAllPaged(int pageNo, int pageSize) {
 		return this.colorService.getAllPaged(pageNo, pageSize);
 	}
 
-	@PostMapping("/getAllSorted")
+	@GetMapping("/getAllSorted")
 	public DataResult<List<ListColorDto>> getAllSorted(Sort.Direction direction) {
 		return this.colorService.getAllSorted(direction);
 	}

@@ -56,12 +56,12 @@ public class AdditionalsController {
 	public DataResult<List<ListAdditionalDto>> getAll() {
 		return this.additionalService.getAll();
 	}
-	@PostMapping("/getAllPaged")
+	@GetMapping("/getAllPaged")
 	public DataResult<List<ListAdditionalDto>> getAllPaged(int pageNo, int pageSize) {
 		return this.additionalService.getAllPaged(pageNo, pageSize);
 	}
 
-	@PostMapping("/getAllSorted")
+	@GetMapping("/getAllSorted")
 	public DataResult<List<ListAdditionalDto>> getAllSorted(Sort.Direction direction) {
 		return this.additionalService.getAllSorted(direction);
 	}

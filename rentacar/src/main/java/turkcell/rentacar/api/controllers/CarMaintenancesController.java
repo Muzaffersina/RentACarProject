@@ -58,12 +58,12 @@ public class CarMaintenancesController {
 	}
 
 
-	@PostMapping("/getAllPaged")
+	@GetMapping("/getAllPaged")
 	public DataResult<List<ListCarMaintenanceDto>> getAllPaged(int pageNo, int pageSize) {
 		return this.carMaintenanceService.getAllPaged(pageNo, pageSize);
 	}
 
-	@PostMapping("/getAllSorted")
+	@GetMapping("/getAllSorted")
 	public DataResult<List<ListCarMaintenanceDto>> getAllSorted(Sort.Direction direction) {
 		return this.carMaintenanceService.getAllSorted(direction);
 	}

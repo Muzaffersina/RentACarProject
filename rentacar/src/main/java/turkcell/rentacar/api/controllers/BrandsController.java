@@ -39,12 +39,12 @@ public class BrandsController {
 		return this.brandService.getAll();
 	}
 	
-	@PostMapping("/getAllPaged")
+	@GetMapping("/getAllPaged")
 	public DataResult<List<ListBrandDto>> getAllPaged(int pageNo, int pageSize) {
 		return this.brandService.getAllPaged(pageNo, pageSize);
 	}
 
-	@PostMapping("/getAllSorted")
+	@GetMapping("/getAllSorted")
 	public DataResult<List<ListBrandDto>> getAllSorted(Sort.Direction direction) {
 		return this.brandService.getAllSorted(direction);
 	}
