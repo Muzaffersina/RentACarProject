@@ -16,5 +16,6 @@ public class GetListPaymentDto {
 	private double totalPayment;	
 	private LocalDate paymentDate;
 	private int rentalRentalId;
+	
 
 }

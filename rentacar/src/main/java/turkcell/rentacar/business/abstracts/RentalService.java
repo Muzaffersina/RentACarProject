@@ -30,7 +30,7 @@ public interface RentalService {
 	
 	
 	boolean checkRentCarExists(int rentalId);
-	boolean checkRentCarDate(int carId);	
+	boolean checkRentCarDate(int carId);
 	boolean checkCarUsed(int carId);	
 	boolean checkCustomerUsed(int customerId);	
 	Rental returnRental(int rentalId);

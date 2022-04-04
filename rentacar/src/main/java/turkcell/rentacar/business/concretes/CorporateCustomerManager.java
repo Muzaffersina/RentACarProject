@@ -40,7 +40,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	public Result add(CreateCorporateCustomerRequest createCorporateCustomerRequest)  {		
 		
 		checkCorporateCustomerTaxNumber(createCorporateCustomerRequest.getTaxNumber());
-		//vergi no gerçekte kontrol.
+		
 		CorporateCustomer corporateCustomer = this.modelMapperService.forRequest()
 				.map(createCorporateCustomerRequest, CorporateCustomer.class);
 		corporateCustomer.setCustomerId(0);

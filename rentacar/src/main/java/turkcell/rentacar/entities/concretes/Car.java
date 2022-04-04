@@ -61,23 +61,3 @@ public class Car {
 	private List<CarDamage> carDamages;
 }
 
-// 17-Arabaya ait hasarlar girilebilmelidir. (Id,CarId,HasarBilgisi) ++++++++++
-
-// BUNDA SANIRIM SADECE BU BILGISI OLAN ARACLAR CARMAINTENANCE EKLENEBILIR OLMALI SANKII ??  
-
-
-// 18- Pos Servisi ekleyiniz. Servis olumsuz döndüğünde kiralama   ----->>>
-//				gerçekleşmemelidir.
-//		payments , rental , addiServi , ınvoice
-
-//   	Yapılan ödemeleri bir tabloda tutunuz
-//	    Bir ödeme en fazla bir kere alınmalıdır
-
-
-// POS SERVİCE LERİ FARKLI PARAMETRELER SAHİP OLABİLİR.. 
-// 2-3 TANE FAKE POS SERVİCİ OLUSTURULMALI
-// 1. şirket =  birinci parametresi k kartı no , cvv, .. gibi bilgiler..
-// 2. sirket farklı sıralamayla veyaaa obje istiyor falan 
-//      ADAPTOR PATERN 
-
-

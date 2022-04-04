@@ -155,6 +155,7 @@ public class CarManager implements CarService {
 
 	@Override
 	public boolean checkCarExists(int carId) {
+		
 		var result = this.carDao.getByCarId(carId);
 		if (result != null) {
 			return true;
@@ -167,7 +168,7 @@ public class CarManager implements CarService {
 
 		checkCarExists(carId);
 
-		Car car = this.carDao.getByCarId(carId);
+		var car = this.carDao.getByCarId(carId);
 		double price = car.getDailyPrice();
 		return price;
 	}
@@ -177,7 +178,7 @@ public class CarManager implements CarService {
 		
 		checkCarExists(carId);
 
-		Car car = this.carDao.getByCarId(carId);
+		var car = this.carDao.getByCarId(carId);
 		double dailkKm = car.getDailyKm();
 		return dailkKm;
 	}
@@ -207,7 +208,7 @@ public class CarManager implements CarService {
 	@Override
 	public void updateCarKm(int carId, int lastKm) {
 
-		Car car = this.carDao.getById(carId);
+		var car = this.carDao.getById(carId);
 		car.setCarTotalKm(lastKm);
 	}
 

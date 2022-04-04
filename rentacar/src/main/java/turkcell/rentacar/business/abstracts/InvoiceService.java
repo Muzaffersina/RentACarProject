@@ -13,7 +13,7 @@ public interface InvoiceService {
 	
 	Result add(CreateInvoiceRequest createInvoiceRequest);
 	Result delete(DeleteInvoiceRequest deleteInvoiceRequest);
-//	Result Update(UpdateInvoiceRequest updateInvoiceRequest);
+
 	
 	DataResult<List<ListInvoiceDto>> getAll();
 	DataResult<List<ListInvoiceDto>> getByDate(LocalDate rentalDate , LocalDate returnDate);

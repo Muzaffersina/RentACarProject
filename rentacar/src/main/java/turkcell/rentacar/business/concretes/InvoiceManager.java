@@ -61,30 +61,13 @@ public class InvoiceManager implements InvoiceService {
 	@Override
 	public Result delete(DeleteInvoiceRequest deleteInvoiceRequest) {
 
-		checkInvoiceExists(deleteInvoiceRequest.getInvoiceId());
-
-		// is kuralları eklenecek
+		checkInvoiceExists(deleteInvoiceRequest.getInvoiceId());		
 		Invoice invoice = this.modelMapperService.forRequest().map(deleteInvoiceRequest, Invoice.class);
 		this.invoiceDao.deleteById(invoice.getInvoiceId());
 
 		return new SuccessResult(Messages.INVOICEDELETE);
 	}
-/*
-	@Override
-	public Result Update(UpdateInvoiceRequest updateInvoiceRequest) {
 
-		checkInvoiceExists(updateInvoiceRequest.getInvoiceId());
-
-		Invoice invoice = this.modelMapperService.forRequest().map(updateInvoiceRequest, Invoice.class);
-		
-		invoice.setTotalPrice(calculatorTotalPrice(updateInvoiceRequest.getRentalId()));
-		invoice.setCreatedDate(LocalDate.now());
-		invoice.setRentalDaysValue(calculatorRentalDays(updateInvoiceRequest.getRentalId()));		
-		this.invoiceDao.save(invoice);
-		
-		return new SuccessResult(Messages.INVOICEUPDATE);	
-	}
-*/
 	@Override
 	public DataResult<List<ListInvoiceDto>> getAll() {
 
@@ -180,5 +163,7 @@ public class InvoiceManager implements InvoiceService {
 		
 		add(createInvoiceRequest);
 	}*/
+
+
 	
 }

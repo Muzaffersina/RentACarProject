@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import turkcell.rentacar.business.abstracts.InvoiceService;
 import turkcell.rentacar.business.abstracts.PaymentInfoService;
 import turkcell.rentacar.business.abstracts.PaymentService;
 import turkcell.rentacar.business.abstracts.RentalService;
@@ -16,7 +17,6 @@ import turkcell.rentacar.business.contants.Messages;
 import turkcell.rentacar.business.dtos.ListPaymentDto;
 import turkcell.rentacar.business.requests.create.CreatePaymentRequest;
 import turkcell.rentacar.business.requests.delete.DeletePaymentRequest;
-import turkcell.rentacar.business.requests.update.UpdatePaymentRequest;
 import turkcell.rentacar.core.adapters.abstracts.BankAdapterService;
 import turkcell.rentacar.core.concretes.BusinessException;
 import turkcell.rentacar.core.utilities.mapping.ModelMapperService;
@@ -34,17 +34,19 @@ public class PaymentManager implements PaymentService {
 	private ModelMapperService modelMapperService;
 	private PaymentDao paymentDao;
 	private RentalService rentalService;
+	private InvoiceService invoiceService;
 	private BankAdapterService bankAdapterService;
 	private PaymentInfoService paymentInfoService;
 
 	@Autowired
 	public PaymentManager(ModelMapperService modelMapperService, PaymentDao paymentDao, RentalService rentalService,
-			BankAdapterService bankAdapterService , PaymentInfoService paymentInfoService) {
+			BankAdapterService bankAdapterService , PaymentInfoService paymentInfoService , InvoiceService invoiceService) {
 		this.modelMapperService = modelMapperService;
 		this.paymentDao = paymentDao;
 		this.rentalService = rentalService;
 		this.bankAdapterService = bankAdapterService;
 		this.paymentInfoService = paymentInfoService;
+		this.invoiceService = invoiceService;
 	}
 	
 	// iş kuraları sonra eklenecek
@@ -63,6 +65,7 @@ public class PaymentManager implements PaymentService {
 		payment.setTotalPayment(calculatorTotalPrice(createPaymentRequest.getRentalId()));
 		payment.setPaymentId(0);
 		
+		
 		this.paymentDao.save(payment);
 
 		return new SuccessResult(Messages.PAYMENTADD);
@@ -79,13 +82,6 @@ public class PaymentManager implements PaymentService {
 		return new SuccessResult(Messages.PAYMENTDELETE);
 	}
 	
-	@Override
-	@Transactional
-	public Result update(UpdatePaymentRequest updatePaymentRequest) {
-		
-		checkPaymentExists(updatePaymentRequest.getPaymentId());		
-		return null;
-	}	
 
 	@Override
 	public DataResult<List<ListPaymentDto>> getAll() {

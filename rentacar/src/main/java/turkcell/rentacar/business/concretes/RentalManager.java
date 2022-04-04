@@ -81,11 +81,12 @@ public class RentalManager implements RentalService {
 		checkRentCarDate(createRentRequest.getCarId());
 
 		Rental rent = this.modelMapperService.forRequest().map(createRentRequest, Rental.class);
-		rent.setTotalPrice(calculatorTotalPrice(rent.getRentalId(), createRentRequest.getAdditionalIds()));
+		
 
-		rent.setRentalId(0);
+		rent.setRentalId(0);		
 		this.rentDao.save(rent);
-
+		rent.setTotalPrice(calculatorTotalPrice(rent.getRentalId(), createRentRequest.getAdditionalIds()));
+		this.rentDao.save(rent);
 		return new SuccessResult(Messages.RENTALADD);
 	}
 
@@ -102,9 +103,10 @@ public class RentalManager implements RentalService {
 		checkRentCarDate(createRentRequest.getCarId());
 
 		Rental rent = this.modelMapperService.forRequest().map(createRentRequest, Rental.class);
+		rent.setRentalId(0);
 		rent.setTotalPrice(calculatorTotalPrice(rent.getRentalId(), createRentRequest.getAdditionalIds()));
 
-		rent.setRentalId(0);
+		
 		this.rentDao.save(rent);
 
 		return new SuccessResult(Messages.RENTALADD);
@@ -115,7 +117,7 @@ public class RentalManager implements RentalService {
 
 		checkRentCarExists(deleteRentRequest.getRentalId());
 		this.invoiceService.checkRentalIdExists(deleteRentRequest.getRentalId());
-		// buraya iş kuralı eklenebilir.
+		// buraya iş kuralı eklenebilir. invoice-payment
 
 		Rental rent = this.modelMapperService.forRequest().map(deleteRentRequest, Rental.class);
 		this.rentDao.deleteById(rent.getRentalId());
@@ -136,16 +138,17 @@ public class RentalManager implements RentalService {
 		this.additionalService.checkAllAdditional(updateRentRequest.getAdditionalIds());
 		this.customerService.checkCustomerExists(updateRentRequest.getCustomerId());
 		checkDate(updateRentRequest.getRentalDate(), updateRentRequest.getReturnDate());
-
+		checkRentalCarCarId(updateRentRequest.getRentalId(),updateRentRequest.getCarId());
 		Rental rent = this.modelMapperService.forRequest().map(updateRentRequest, Rental.class);
 
 		rent.setTotalPrice(
-				calculatorTotalPrice(updateRentRequest.getRentalCityId(), updateRentRequest.getAdditionalIds()));
+				calculatorTotalPrice(updateRentRequest.getRentalId(), updateRentRequest.getAdditionalIds()));
 
 		if (checkReturnedInTime(updateRentRequest.getRentalId(), updateRentRequest.getReturnDate())) {
 			// donus tarıhı .now ile de olabilir.
 			// Ek ödeme faturaya gidip ekleyecek mi ?
 			extraPriceCal(updateRentRequest.getRentalId(), updateRentRequest.getAdditionalIds());
+			System.out.println(extraPriceCal(updateRentRequest.getRentalId(), updateRentRequest.getAdditionalIds()));
 		}
 
 		updateCarKm(updateRentRequest.getCarId(), updateRentRequest.getReturnKm());
@@ -227,6 +230,16 @@ public class RentalManager implements RentalService {
 		}
 		throw new BusinessException(Messages.RENTALNOTFOUND);
 	}
+	
+	public boolean checkRentalCarCarId(int rentalId, int carId) {
+		 checkRentCarExists(rentalId);		
+		 
+		 if(this.rentDao.getByRentalId(rentalId).getCar().getCarId() == carId) {
+			 return true;
+		 }
+		 
+		 throw new BusinessException(Messages.RENTALCARIDDOESNTEXİSTS);		
+	}
 
 	public boolean checkDate(LocalDate rentalDate, LocalDate returnDate) {
 
@@ -249,23 +262,23 @@ public class RentalManager implements RentalService {
 
 	}
 
-	// ordereddan cekilebilir.
+	
 	public double calculatorTotalPrice(int rentalId, List<Integer> additionalServiceId) {
 
 		double totalPrice = 0;
 		totalPrice = (this.additionalService.calculateAdditionalServicePrice(additionalServiceId)
 				+ this.carService.calculateRentalPrice(this.rentDao.getByRentalId(rentalId).getCar().getCarId()))
-				* calculatorDaysBetween(rentalId);
+				* calculatorDaysBetween(rentalId);		
 		/// Bu kısım create de
 		// double carDailyKm = this.carService.calculateRentalPrice(carId);
 		// lastKm bilgisi olmadığı için eklenemiyor
-		if ((this.rentDao.getByRentalId(rentalId).getRentalCity().getCityId() == this.rentDao.getByRentalId(rentalId)
+		if ((this.rentDao.getByRentalId(rentalId).getRentalCity().getCityId() != this.rentDao.getByRentalId(rentalId)
 				.getReturnCity().getCityId())) {
 
 			double differentCityPrice = 100 * calculatorDaysBetween(rentalId);
 			totalPrice += differentCityPrice;
 		}
-
+		
 		return totalPrice;
 	}
 
@@ -274,7 +287,7 @@ public class RentalManager implements RentalService {
 		checkRentCarExists(rentalId);
 		var result = this.rentDao.getByRentalId(rentalId);
 
-		long daysBetween = ChronoUnit.DAYS.between(returnedTime, result.getReturnDate());
+		long daysBetween = ChronoUnit.DAYS.between(result.getReturnDate() ,returnedTime);		
 		if (daysBetween > 0) {
 			return true;
 		}
@@ -289,7 +302,7 @@ public class RentalManager implements RentalService {
 		double extraPrice = (this.additionalService.calculateAdditionalServicePrice(additionalServiceId)
 				+ this.carService.calculateRentalPrice(result.getCar().getCarId())) 
 				* calculatorDaysBetween(rentalId);
-		extraPrice -= result.getTotalPrice();
+		
 		return extraPrice;
 	}
 
@@ -298,7 +311,7 @@ public class RentalManager implements RentalService {
 
 		var result = checkRentCarDate(carId);
 		if (!result) {
-			throw new BusinessException(Messages.RENTALNOTDELETE);
+			throw new BusinessException(Messages.CARNOTDELETE);
 		}
 		return true;
 	}
@@ -307,7 +320,7 @@ public class RentalManager implements RentalService {
 	public boolean checkRentCarDate(int carId) {
 
 		var result = this.rentDao.getByCar_CarId(carId);
-		for (Rental rental : result) {
+		for (var rental : result) {
 			long daysBetween = ChronoUnit.DAYS.between(rental.getReturnDate(), LocalDate.now());
 			if (daysBetween <= 0) {
 				throw new BusinessException(Messages.RENTALALREADYEXISTS);
@@ -340,8 +353,8 @@ public class RentalManager implements RentalService {
 			return true;
 		}
 		throw new BusinessException(Messages.CUSTOMERNOTDELETE);
-	}
-	
+	}	
+
 	
 	/*public void addOrderedAdditional(List<Integer> additionalIds, int rentalId) {
 		

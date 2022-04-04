@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -40,14 +41,8 @@ public class Payment {
 	@JoinColumn(name = "rental_id")	
 	private Rental rental;	
 	
+	
 	@OneToMany(mappedBy = "payment")
 	private List<PaymentInfo> paymentInfos;	
 }
 
-
-
-//19- Magic stringlerden kurtulunuz. kendimiz yapalim
-//20- Müşteriler kart bilgilerini kaydetmek isterse kart bilgileri ayrı bir tabloda tutulmalıdır. +++++
-//21- Müşteriler arabayı belirtilenden geç teslim ederse kiralama günü kadar yeni ödeme alınır. Fark tutarı kadar yeni fatura kesilir.
-
-//            Bu kurallar ek hizmetler için de geçerlidir.

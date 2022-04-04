@@ -67,32 +67,3 @@ public class Rental {
 	private List<Payment> payments;	
 }
 
-//gunluk kira ucreti
-//	Arabalar kiralanırken farklı bir şehire bırakılabilir
-//	Kiralamaya 750 TL eklenir     
-
-// Şirketimiz büyüdü. Kurumsal müşteriler araba kiralayabilmelidir. (Kurumsal 
-// Müşteri – vergiNo, Şirket ismi,email….
-// Kiralama kuralları bireysel müşteri ile aynıdır.
-// IndividualCustomer -- CorporateCustomer
-
-/*
- * 			14MART PAIR
- * 
- *  Tüm kiralamalar sonucunda fatura kesilmelidir. (Fatura No, Oluşturma 
- *	Tarihi, Kiralama tarihleri, Toplam kiralama gün sayısı, kiralama tutarı,musteri)
- *	Belirli tarih aralığında tüm faturalar listelenebilmelidir.
- *	Müşteriye ait faturalar listelenebilmelidir.
- * 
- * 
- * 
- *  Diğeri+++  
- *  Arabalara güncel kilometre bilgisi eklenmelidir.
- *	Kiralamalarda başlıngıç kilometresi girilmelidir.
- *	Kiralama Dönüşlerinde dönüş kilometresi bilgisi girilmelidir. Bu bilgi arabada 
- *	da güncellenmelidir.
- *  
- * 
- */
-
-

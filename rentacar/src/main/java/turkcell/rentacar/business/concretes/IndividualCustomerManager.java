@@ -117,10 +117,5 @@ public class IndividualCustomerManager implements IndividualCustomerService{
 			return true;
 		}
 		throw new BusinessException(Messages.INDIVIDUALCUSTOMERIDENDITYNUMBERRROR);
-	}
-
-	// tc falannnnnnnnnn 
-	
+	}	
 }
-
-

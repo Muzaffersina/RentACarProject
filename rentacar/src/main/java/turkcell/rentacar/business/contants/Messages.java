@@ -64,6 +64,7 @@ public class Messages {
 	public static final String CARLISTFORPRICE = "carDamage.listed.for.price";
 	public static final String CARFOUND = "carDamage.found";
 	public static final String CARNOTFOUND = "carDamage.not.found";	
+	public static final String CARNOTDELETE = "carDamage.not.delete";	
 	
 	
 	public static final String CITYADD = "city.added";
@@ -136,6 +137,7 @@ public class Messages {
 	public static final String RENTALALREADYEXISTS ="rental.already.exists";
 	public static final String RENTALDATESNOTVALİD ="rental.dates.are.not.valid";
 	public static final String RENTALEXİSTSININVOICE= "rental.car.id.exists.in.invoice";
+	public static final String RENTALCARIDDOESNTEXİSTS= "rentalcar.car.id.does.not.exist";
 	
 	public static final String GARANTIBANKLIMITENOUGH = "garantiBank.enough.limit";
 	public static final String GARANTIBANKNOTLIMITENOUGH = "garantiBank.not.enough.limit";
