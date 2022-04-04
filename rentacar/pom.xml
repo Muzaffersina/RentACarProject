@@ -76,24 +76,10 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>com.heroku.sdk</groupId>
-				<artifactId>heroku-maven-plugin</artifactId>
-				<version>1.1.1</version>
-				<configuration>
-					<appName>rentacarproject</appName>
-					<includeTarget>false</includeTarget>
-					<includes>
-						<include>${basedir}/${full-artifact-name}</include>
-					</includes>
-					<jdkVersion>1.8</jdkVersion>
-					<processTypes>
-						<web>java -jar ${full-artifact-name}</web>
-					</processTypes>
-				</configuration>
-			</plugin>
+			
 		</plugins>
 	</build>
+
 
 
 </project>
