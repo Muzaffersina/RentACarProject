@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import turkcell.rentacar.business.abstracts.CustomerService;
 import turkcell.rentacar.business.abstracts.InvoiceService;
+import turkcell.rentacar.business.abstracts.PaymentService;
 import turkcell.rentacar.business.abstracts.RentalService;
 import turkcell.rentacar.business.contants.Messages;
 import turkcell.rentacar.business.dtos.ListInvoiceDto;
@@ -28,23 +30,27 @@ import turkcell.rentacar.entities.concretes.Invoice;
 public class InvoiceManager implements InvoiceService {
 
 	private ModelMapperService modelMapperService;
+	private PaymentService paymentService;
 	private InvoiceDao invoiceDao;
 	private CustomerService customerService;
 	private RentalService rentalService;
 
 	@Autowired
 	public InvoiceManager(ModelMapperService modelMapperService, InvoiceDao invoiceDao, CustomerService customerService,
-			RentalService rentalService) {
+			RentalService rentalService,@Lazy PaymentService paymentService) {
 		super();
 		this.modelMapperService = modelMapperService;
 		this.invoiceDao = invoiceDao;
 		this.customerService = customerService;
 		this.rentalService = rentalService;
+		this.paymentService = paymentService;
 	}
 
 	@Override
 	public Result add(CreateInvoiceRequest createInvoiceRequest) {
 		//iş kuralları
+		
+		this.rentalService.checkRentCarExist(createInvoiceRequest.getRentalId());
 		
 		Invoice invoice = this.modelMapperService.forRequest().map(createInvoiceRequest, Invoice.class);
 
@@ -61,8 +67,10 @@ public class InvoiceManager implements InvoiceService {
 	@Override
 	public Result delete(DeleteInvoiceRequest deleteInvoiceRequest) {
 
-		checkInvoiceExists(deleteInvoiceRequest.getInvoiceId());		
+		checkInvoiceExist(deleteInvoiceRequest.getInvoiceId());	
+		
 		Invoice invoice = this.modelMapperService.forRequest().map(deleteInvoiceRequest, Invoice.class);
+		checkPaymentForRentalId(invoice.getRental().getRentalId());
 		this.invoiceDao.deleteById(invoice.getInvoiceId());
 
 		return new SuccessResult(Messages.INVOICEDELETE);
@@ -93,7 +101,7 @@ public class InvoiceManager implements InvoiceService {
 	@Override
 	public DataResult<List<ListInvoiceDto>> getByCustomerId(int customerId) {
 
-		this.customerService.checkCustomerExists(customerId);
+		this.customerService.checkCustomerExist(customerId);
 
 		List<Invoice> result = this.invoiceDao.getByCustomer_CustomerId(customerId);
 		List<ListInvoiceDto> response = result.stream()
@@ -104,7 +112,7 @@ public class InvoiceManager implements InvoiceService {
 	}
 
 	@Override
-	public boolean checkInvoiceExists(int invoiceId) {
+	public boolean checkInvoiceExist(int invoiceId) {
 
 		var result = this.invoiceDao.existsById(invoiceId);
 		if (result) {
@@ -113,7 +121,7 @@ public class InvoiceManager implements InvoiceService {
 		throw new BusinessException(Messages.INVOICENOTFOUND);
 	}
 
-	@Override
+	
 	public double calculatorTotalPrice(int rentalId) {
 
 		var returnedRental = this.rentalService.returnRental(rentalId);
@@ -121,19 +129,20 @@ public class InvoiceManager implements InvoiceService {
 		return returnedRental.getTotalPrice();
 	}
 
-	@Override
-	public double calculatorRentalDays(int rentalId) {
+	
+	public long calculatorRentalDays(int rentalId) {
 		
 		var returnedRental = this.rentalService.returnRental(rentalId);
 		
-		int daysBetween = (int) ChronoUnit.DAYS.between(returnedRental.getRentalDate(), returnedRental.getReturnDate());
+		long daysBetween =  ChronoUnit.DAYS.between(returnedRental.getRentalDate(), returnedRental.getReturnDate());
+		
 		return daysBetween;
 	}
 
 	@Override
-	public boolean checkRentalIdExists(int rentalId) {
+	public boolean checkRentalIdExist(int rentalId) {
 		
-		this.rentalService.checkRentCarExists(rentalId);
+		this.rentalService.checkRentCarExist(rentalId);
 
 		List<Invoice> result = this.invoiceDao.getAllByRental_RentalId(rentalId);
 		
@@ -143,6 +152,24 @@ public class InvoiceManager implements InvoiceService {
 		throw new BusinessException(Messages.RENTALEXİSTSININVOICE);
 		
 	}	
+	
+
+	@Override
+	public boolean checkPaymentForRentalId(int rentalId) {
+		
+		this.rentalService.checkRentCarExist(rentalId);
+		
+		if(this.paymentService.checkPaymentForRentalId(rentalId)) {
+			return true;
+		}
+		throw new BusinessException(Messages.INVOICENOTDELETE);
+	}
+	
+	
+	
+	
+	
+	
 	/*@Override
 	public void saveInvoice(int customerId, int rentalId, LocalDate rentalDate, LocalDate returnDate,
 			double totalPrice) {
@@ -162,8 +189,5 @@ public class InvoiceManager implements InvoiceService {
 		createInvoiceRequest.setTotalPrice(totalPrice);	
 		
 		add(createInvoiceRequest);
-	}*/
-
-
-	
+	}*/	
 }

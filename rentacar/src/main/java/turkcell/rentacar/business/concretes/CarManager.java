@@ -91,8 +91,8 @@ public class CarManager implements CarService {
 	@Override
 	public Result add(CreateCarRequest createCarRequest) {
 
-		this.brandService.checkBrandExists(createCarRequest.getBrandId());
-		this.colorService.checkColorExists(createCarRequest.getColorId());
+		this.brandService.checkBrandExist(createCarRequest.getBrandId());
+		this.colorService.checkColorExist(createCarRequest.getColorId());
 
 		Car car = this.modelMapperService.forRequest().map(createCarRequest, Car.class);
 		car.setCarId(0);
@@ -105,7 +105,7 @@ public class CarManager implements CarService {
 	@Override
 	public Result delete(DeleteCarRequest deleteCarRequest) {
 
-		checkCarExists(deleteCarRequest.getCarId());
+		checkCarExist(deleteCarRequest.getCarId());
 		carMaintenanceService.checkCarUsed(deleteCarRequest.getCarId());
 		rentalService.checkCarUsed(deleteCarRequest.getCarId());
 
@@ -119,9 +119,9 @@ public class CarManager implements CarService {
 	@Override
 	public Result update(UpdateCarRequest updateCarRequest) {
 
-		checkCarExists(updateCarRequest.getCarId());
-		this.brandService.checkBrandExists(updateCarRequest.getBrandId());
-		this.colorService.checkColorExists(updateCarRequest.getColorId());
+		checkCarExist(updateCarRequest.getCarId());
+		this.brandService.checkBrandExist(updateCarRequest.getBrandId());
+		this.colorService.checkColorExist(updateCarRequest.getColorId());
 		
 
 		Car car = this.modelMapperService.forRequest().map(updateCarRequest, Car.class);
@@ -134,7 +134,7 @@ public class CarManager implements CarService {
 	@Override
 	public DataResult<ListCarDto> getByCarId(int carId) {
 
-		checkCarExists(carId);
+		checkCarExist(carId);
 
 		var result = this.carDao.getByCarId(carId);
 		ListCarDto response = this.modelMapperService.forDto().map(result, ListCarDto.class);
@@ -154,7 +154,7 @@ public class CarManager implements CarService {
 	}
 
 	@Override
-	public boolean checkCarExists(int carId) {
+	public boolean checkCarExist(int carId) {
 		
 		var result = this.carDao.getByCarId(carId);
 		if (result != null) {
@@ -166,7 +166,7 @@ public class CarManager implements CarService {
 	@Override
 	public double calculateRentalPrice(int carId) {
 
-		checkCarExists(carId);
+		checkCarExist(carId);
 
 		var car = this.carDao.getByCarId(carId);
 		double price = car.getDailyPrice();
@@ -176,7 +176,7 @@ public class CarManager implements CarService {
 	@Override
 	public double checkDailyKm(int carId) {
 		
-		checkCarExists(carId);
+		checkCarExist(carId);
 
 		var car = this.carDao.getByCarId(carId);
 		double dailkKm = car.getDailyKm();
@@ -186,7 +186,7 @@ public class CarManager implements CarService {
 	@Override
 	public boolean checkColorUsed(int colorId) {
 
-		this.colorService.checkColorExists(colorId);
+		this.colorService.checkColorExist(colorId);
 
 		if (this.carDao.getByColor_ColorId(colorId) != null) {
 			throw new BusinessException(Messages.COLORNOTDELETE);
@@ -197,7 +197,7 @@ public class CarManager implements CarService {
 	@Override
 	public boolean checkBrandUsed(int brandId) {
 
-		this.brandService.checkBrandExists(brandId);
+		this.brandService.checkBrandExist(brandId);
 
 		if (this.carDao.getByBrand_BrandId(brandId) != null) {
 			throw new BusinessException(Messages.BRANDNOTDELETE);

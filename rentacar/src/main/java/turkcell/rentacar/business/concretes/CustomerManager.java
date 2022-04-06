@@ -44,7 +44,7 @@ public class CustomerManager implements CustomerService {
 	@Override
 	public DataResult<ListCustomerDto> getById(int id) {
 		
-		checkCustomerExists(id);
+		checkCustomerExist(id);
 		
 		Customer result = this.customerDao.getById(id);			
 		ListCustomerDto response = this.modelMapperService.forDto().map(result, ListCustomerDto.class);	
@@ -53,7 +53,7 @@ public class CustomerManager implements CustomerService {
 	}
 
 	@Override
-	public boolean checkCustomerExists(int id) {
+	public boolean checkCustomerExist(int id) {
 		
 		var result = this.customerDao.existsById(id);
 		if (result) {

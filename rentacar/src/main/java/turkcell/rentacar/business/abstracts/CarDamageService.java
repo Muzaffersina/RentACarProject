@@ -1,6 +1,7 @@
 package turkcell.rentacar.business.abstracts;
 
 
+import java.time.LocalDate;
 import java.util.List;
 
 import turkcell.rentacar.business.dtos.ListCarDamageDto;
@@ -22,6 +23,6 @@ public interface CarDamageService {
 	DataResult<List<ListCarDamageDto>> getAllByCarId(int carId);
 	
 	// getByCarId ye gore yapılabilir ******
-	boolean checkCarDamageExists(int carDamageId);
+	boolean checkCarDamageExistForRental(int carId,LocalDate createdDate);
 
 }

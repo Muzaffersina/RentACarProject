@@ -55,7 +55,7 @@ public class PaymentManager implements PaymentService {
 	@Transactional
 	public Result add(CreatePaymentRequest createPaymentRequest) {
 
-		this.rentalService.checkRentCarExists(createPaymentRequest.getRentalId());
+		this.rentalService.checkRentCarExist(createPaymentRequest.getRentalId());
 		
 		this.bankAdapterService.checkIfLimitIsEnough(createPaymentRequest.getCreatePaymentInfoRequest(),false);
 		checkRememberMe(createPaymentRequest);
@@ -74,7 +74,7 @@ public class PaymentManager implements PaymentService {
 	@Override
 	public Result delete(DeletePaymentRequest deletePaymentRequest) {
 
-		checkPaymentExists(deletePaymentRequest.getPaymentId());
+		checkPaymentExist(deletePaymentRequest.getPaymentId());
 
 		Payment payment = this.modelMapperService.forRequest().map(deletePaymentRequest, Payment.class);
 		this.paymentDao.deleteById(payment.getPaymentId());
@@ -110,9 +110,9 @@ public class PaymentManager implements PaymentService {
 	@Override 
 	public DataResult<List<ListPaymentDto>> getByRentalId(int rentalId) {
 
-		this.rentalService.checkRentCarExists(rentalId);
+		this.rentalService.checkRentCarExist(rentalId);
 
-		List<Payment> result = this.paymentDao.getAllByRental_RentalId(rentalId);
+		List<Payment> result = this.paymentDao.getAllByRental_RentalId(rentalId);		
 		List<ListPaymentDto> response = result.stream()
 				.map(payment -> this.modelMapperService.forDto().map(payment, ListPaymentDto.class))
 				.collect(Collectors.toList());
@@ -121,7 +121,7 @@ public class PaymentManager implements PaymentService {
 	}
 
 	@Override
-	public boolean checkPaymentExists(int paymentId) {
+	public boolean checkPaymentExist(int paymentId) {
 		
 		if (this.paymentDao.existsById(paymentId)) {
 			return true;
@@ -144,4 +144,14 @@ public class PaymentManager implements PaymentService {
 		}
 		return true;
 	}	
+	
+	public boolean checkPaymentForRentalId(int rentalId) {
+		
+		this.rentalService.checkRentCarExist(rentalId);
+
+		if(this.paymentDao.getAllByRental_RentalId(rentalId).isEmpty()) {
+			return true;			
+		}
+		return false;			
+	}
 }

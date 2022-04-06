@@ -9,6 +9,6 @@ public interface CustomerService {
 	DataResult<List<ListCustomerDto>> getAll();
 	DataResult<ListCustomerDto> getById(int id);
 	
-	boolean checkCustomerExists(int id);
+	boolean checkCustomerExist(int id);
 	
 }

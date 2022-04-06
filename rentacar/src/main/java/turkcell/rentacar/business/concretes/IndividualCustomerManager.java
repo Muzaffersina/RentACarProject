@@ -50,7 +50,7 @@ public class IndividualCustomerManager implements IndividualCustomerService{
 	@Override
 	public Result delete(DeleteIndividualCustomerRequest deleteIndividualCustomerRequest) {
 		
-		checkIndividualCustomerExists(deleteIndividualCustomerRequest.getCustomerId());
+		checkIndividualCustomerExist(deleteIndividualCustomerRequest.getCustomerId());
 		this.rentalService.checkCustomerUsed(deleteIndividualCustomerRequest.getCustomerId());
 		
 		IndividualCustomer individualCustomer = this.modelMapperService.forRequest()
@@ -64,7 +64,7 @@ public class IndividualCustomerManager implements IndividualCustomerService{
 	@Override
 	public Result update(UpdateIndividualCustomerRequest updateIndividualCustomerRequest)  {
 		
-		checkIndividualCustomerExists(updateIndividualCustomerRequest.getCustomerId());
+		checkIndividualCustomerExist(updateIndividualCustomerRequest.getCustomerId());
 		// gercek kisimi mernis sorgu
 		IndividualCustomer individualCustomer = this.modelMapperService.forRequest()
 				.map(updateIndividualCustomerRequest, IndividualCustomer.class);
@@ -90,7 +90,7 @@ public class IndividualCustomerManager implements IndividualCustomerService{
 	@Override
 	public DataResult<ListIndividualCustomerDto> getById(int id) {
 		
-		checkIndividualCustomerExists(id);
+		checkIndividualCustomerExist(id);
 		
 		IndividualCustomer result = this.individualCustomerDao.getById(id);		
 		
@@ -101,7 +101,7 @@ public class IndividualCustomerManager implements IndividualCustomerService{
 	}
 
 	@Override
-	public boolean checkIndividualCustomerExists(int id) {
+	public boolean checkIndividualCustomerExist(int id) {
 		var result = this.individualCustomerDao.existsById(id);
 		if (result) {
 			return true;

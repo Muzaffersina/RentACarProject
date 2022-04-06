@@ -22,7 +22,7 @@ public interface CityService {
 	DataResult<List<ListCityDto>> getAllSorted(Sort.Direction direction);	
 	DataResult<ListCityDto> getById(int cityId);
 	
-	boolean checkCityExists(int cityId);
-	boolean checkCityNameExists(String cityName);
+	boolean checkCityExist(int cityId);
+	boolean checkCityNameExist(String cityName);
 		
 }

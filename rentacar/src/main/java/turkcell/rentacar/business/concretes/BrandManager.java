@@ -82,7 +82,7 @@ public class BrandManager implements BrandService {
 	@Override
 	public Result add(CreateBrandRequest createBrandRequest) {
 		
-		checkBrandNameExists(createBrandRequest.getBrandName());
+		checkBrandNameExist(createBrandRequest.getBrandName());
 		
 		Brand brand = this.modelMapperService.forRequest().map(createBrandRequest, Brand.class);
 		brand.setBrandId(0);
@@ -95,7 +95,7 @@ public class BrandManager implements BrandService {
 	@Override
 	public Result delete(DeleteBrandRequest deleteBrandRequest) {
 		
-		checkBrandExists(deleteBrandRequest.getBrandId());		
+		checkBrandExist(deleteBrandRequest.getBrandId());		
 		this.carService.checkBrandUsed(deleteBrandRequest.getBrandId());
 		
 		Brand brand = this.modelMapperService.forRequest().map(deleteBrandRequest, Brand.class);
@@ -107,7 +107,7 @@ public class BrandManager implements BrandService {
 	@Override
 	public Result update(UpdateBrandRequest updateBrandReques) {
 		
-		checkBrandExists(updateBrandReques.getBrandId());
+		checkBrandExist(updateBrandReques.getBrandId());
 		
 		Brand brand = this.modelMapperService.forRequest().map(updateBrandReques, Brand.class);
 		this.brandDao.save(brand);
@@ -118,7 +118,7 @@ public class BrandManager implements BrandService {
 	@Override
 	public DataResult<ListBrandDto> getByBrandId(int brandId){
 		
-		checkBrandExists(brandId);
+		checkBrandExist(brandId);
 		
 		var result = this.brandDao.getByBrandId(brandId);
 		ListBrandDto response = this.modelMapperService.forDto().map(result, ListBrandDto.class);
@@ -128,7 +128,7 @@ public class BrandManager implements BrandService {
 	}
 
 	@Override
-	public boolean checkBrandNameExists(String brandName) {
+	public boolean checkBrandNameExist(String brandName) {
 		
 		var result = this.brandDao.getByBrandName(brandName);
 		if (result == null) {
@@ -138,7 +138,7 @@ public class BrandManager implements BrandService {
 	}
 
 	@Override
-	public boolean checkBrandExists(int brandId) {
+	public boolean checkBrandExist(int brandId) {
 		
 		var result = this.brandDao.getByBrandId(brandId);
 		if (result != null) {

@@ -24,9 +24,9 @@ public interface CarMaintenanceService {
 	DataResult<GetListCarMaintenanceDto> getByMaintenanceId(int carMaintenanceId);
 	DataResult<List<ListCarMaintenanceDto>> getByCar_CarId(int carId);
 	
-	boolean checkCarMaintenanceExists(int carMaintenanceId);	
+	boolean checkCarMaintenanceExist(int carMaintenanceId);	
 	boolean checkCarMaintenceReturnDate(int maintenanceId);
-	boolean checkCarMaintenanceCar_CarIdExists(int carId);
+	boolean checkCarMaintenanceCar_CarIdExist(int carId);
 	boolean checkCarMaintenceCar_CarIdReturnDate(int carId);
 	
 	boolean checkCarUsed(int carId);

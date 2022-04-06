@@ -22,7 +22,7 @@ public interface ColorService {
 		
 		DataResult<ListColorDto> getByColorId(int colorId);
 		
-		boolean checkColorNameExists(String colorName);
-		boolean checkColorExists(int colorId);
+		boolean checkColorNameExist(String colorName);
+		boolean checkColorExist(int colorId);
 		
 }

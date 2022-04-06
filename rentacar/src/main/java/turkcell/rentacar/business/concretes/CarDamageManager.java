@@ -1,5 +1,6 @@
 package turkcell.rentacar.business.concretes;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,8 +46,8 @@ public class CarDamageManager implements CarDamageService{
 	@Override
 	public Result add(CreateCarDamageRequest createCarDamageRequest) {
 		
-		this.carService.checkCarExists(createCarDamageRequest.getCarId());
-		
+		this.carService.checkCarExist(createCarDamageRequest.getCarId());
+	
 		CarDamage carDamage = this.modelMapperService.forRequest().map(createCarDamageRequest, CarDamage.class);
 		this.carDamageDao.save(carDamage);
 		
@@ -56,7 +57,7 @@ public class CarDamageManager implements CarDamageService{
 	@Override
 	public Result delete(DeleteCarDamageRequest deleteCarDamageRequest) {		
 		
-		checkCarDamageExists(deleteCarDamageRequest.getDamageId());
+		checkCarDamageExist(deleteCarDamageRequest.getDamageId());
 		
 		CarDamage carDamage = this.modelMapperService.forRequest().map(deleteCarDamageRequest, CarDamage.class);
 		this.carDamageDao.deleteById(carDamage.getDamageId());
@@ -67,8 +68,8 @@ public class CarDamageManager implements CarDamageService{
 	@Override
 	public Result update(UpdateCarDamageRequest updateCarDamageRequest) {
 		
-		this.carService.checkCarExists(updateCarDamageRequest.getCarId());		
-		checkCarDamageExists(updateCarDamageRequest.getDamageId());
+		this.carService.checkCarExist(updateCarDamageRequest.getCarId());		
+		checkCarDamageExist(updateCarDamageRequest.getDamageId());
 		
 		CarDamage carDamage = this.modelMapperService.forRequest().map(updateCarDamageRequest, CarDamage.class);
 		this.carDamageDao.save(carDamage);
@@ -103,7 +104,7 @@ public class CarDamageManager implements CarDamageService{
 	@Override
 	public DataResult<ListCarDamageDto> getByCarDamageId(int carDamageId) {
 
-		checkCarDamageExists(carDamageId);
+		checkCarDamageExist(carDamageId);
 		
 		CarDamage result = this.carDamageDao.getById(carDamageId);			
 		ListCarDamageDto response = this.modelMapperService.forDto().map(result, ListCarDamageDto.class);	
@@ -123,15 +124,24 @@ public class CarDamageManager implements CarDamageService{
 		return new SuccessDataResult<List<ListCarDamageDto>>(response,Messages.CARDAMAGEFOUND);
 	}	
 
-	@Override
-	public boolean checkCarDamageExists(int carDamageId) {
-		
-		var result = this.carDamageDao.existsById(carDamageId);		
-		if (result) {
+	
+	public boolean checkCarDamageExist(int carDamageId) {		
+			
+		if (this.carDamageDao.existsById(carDamageId)) {
 			return true;
 		}
 		throw new BusinessException(Messages.CARDAMAGENOTFOUND);
+	}	
+	@Override
+	public boolean checkCarDamageExistForRental(int carId , LocalDate createdDate) {
+		
+		List<CarDamage> result = this.carDamageDao.getAllByCar_CarId(carId);		
+		for (var carDamage : result) {
+			System.out.println(carDamage.getDamageDate()+"    "+ createdDate);
+			if (carDamage.getDamageDate().isEqual(createdDate)) {
+				throw new BusinessException(Messages.CARDAMAGEALREADYEXISTS);
+			}
+		}
+		return false;
 	}
-
-	
 }

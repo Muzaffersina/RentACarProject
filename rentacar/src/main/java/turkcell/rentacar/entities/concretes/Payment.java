@@ -39,8 +39,7 @@ public class Payment {
 	
 	@ManyToOne
 	@JoinColumn(name = "rental_id")	
-	private Rental rental;	
-	
+	private Rental rental;		
 	
 	@OneToMany(mappedBy = "payment")
 	private List<PaymentInfo> paymentInfos;	

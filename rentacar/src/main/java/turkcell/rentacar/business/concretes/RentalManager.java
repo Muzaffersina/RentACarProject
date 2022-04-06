@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import turkcell.rentacar.business.abstracts.AdditionalService;
+import turkcell.rentacar.business.abstracts.CarDamageService;
 import turkcell.rentacar.business.abstracts.CarMaintenanceService;
 import turkcell.rentacar.business.abstracts.CarService;
 import turkcell.rentacar.business.abstracts.CityService;
@@ -48,13 +49,14 @@ public class RentalManager implements RentalService {
 	private CustomerService customerService;
 	private OrderedAdditionalService orderedAdditionalService;
 	private InvoiceService invoiceService;
+	private CarDamageService carDamageService;
 
 	@Lazy
 	@Autowired
 	public RentalManager(RentalDao rentDao, ModelMapperService modelMapperService,
 			CarMaintenanceService carMaintenanceService, CarService carService, AdditionalService additionalService,
 			CityService cityService, CustomerService customerService, OrderedAdditionalService orderedAdditionalService,
-			InvoiceService invoiceService) {
+			InvoiceService invoiceService,CarDamageService carDamageService) {
 
 		this.rentDao = rentDao;
 		this.modelMapperService = modelMapperService;
@@ -65,18 +67,19 @@ public class RentalManager implements RentalService {
 		this.customerService = customerService;
 		this.orderedAdditionalService = orderedAdditionalService;
 		this.invoiceService = invoiceService;
-
+		this.carDamageService = carDamageService;
 	}
 
 	@Override
 	public Result addIndividualCustomer(CreateRentalRequest createRentRequest) {
 
-		this.carService.checkCarExists(createRentRequest.getCarId());
-		this.customerService.checkCustomerExists(createRentRequest.getCustomerId());
+		this.carService.checkCarExist(createRentRequest.getCarId());
+		this.customerService.checkCustomerExist(createRentRequest.getCustomerId());
 		this.additionalService.checkAllAdditional(createRentRequest.getAdditionalIds());
 		this.carMaintenanceService.checkCarMaintenceCar_CarIdReturnDate(createRentRequest.getCarId());
-		this.cityService.checkCityExists(createRentRequest.getRentalCityId());
-		this.cityService.checkCityExists(createRentRequest.getReturnCityId());
+		this.cityService.checkCityExist(createRentRequest.getRentalCityId());
+		this.cityService.checkCityExist(createRentRequest.getReturnCityId());
+		this.carDamageService.checkCarDamageExistForRental(createRentRequest.getCarId() , createRentRequest.getRentalDate());
 		checkDate(createRentRequest.getRentalDate(), createRentRequest.getReturnDate());
 		checkRentCarDate(createRentRequest.getCarId());
 
@@ -93,12 +96,12 @@ public class RentalManager implements RentalService {
 	@Override
 	public Result addCorporateCustomer(CreateRentalRequest createRentRequest) {
 
-		this.carService.checkCarExists(createRentRequest.getCarId());
-		this.customerService.checkCustomerExists(createRentRequest.getCustomerId());
+		this.carService.checkCarExist(createRentRequest.getCarId());
+		this.customerService.checkCustomerExist(createRentRequest.getCustomerId());
 		this.additionalService.checkAllAdditional(createRentRequest.getAdditionalIds());
 		this.carMaintenanceService.checkCarMaintenceCar_CarIdReturnDate(createRentRequest.getCarId());
-		this.cityService.checkCityExists(createRentRequest.getRentalCityId());
-		this.cityService.checkCityExists(createRentRequest.getReturnCityId());
+		this.cityService.checkCityExist(createRentRequest.getRentalCityId());
+		this.cityService.checkCityExist(createRentRequest.getReturnCityId());
 		checkDate(createRentRequest.getRentalDate(), createRentRequest.getReturnDate());
 		checkRentCarDate(createRentRequest.getCarId());
 
@@ -113,11 +116,11 @@ public class RentalManager implements RentalService {
 	}
 
 	@Override
+	
 	public Result delete(DeleteRentalRequest deleteRentRequest) {
-
-		checkRentCarExists(deleteRentRequest.getRentalId());
-		this.invoiceService.checkRentalIdExists(deleteRentRequest.getRentalId());
-		// buraya iş kuralı eklenebilir. invoice-payment
+		
+		checkRentCarExist(deleteRentRequest.getRentalId());
+		this.invoiceService.checkRentalIdExist(deleteRentRequest.getRentalId());		
 
 		Rental rent = this.modelMapperService.forRequest().map(deleteRentRequest, Rental.class);
 		this.rentDao.deleteById(rent.getRentalId());
@@ -131,12 +134,12 @@ public class RentalManager implements RentalService {
 
 		// sadeleştirilecek.
 
-		checkRentCarExists(updateRentRequest.getRentalId());
-		this.carService.checkCarExists(updateRentRequest.getCarId());
-		this.cityService.checkCityExists(updateRentRequest.getRentalCityId());
-		this.cityService.checkCityExists(updateRentRequest.getReturnCityId());
+		checkRentCarExist(updateRentRequest.getRentalId());
+		this.carService.checkCarExist(updateRentRequest.getCarId());
+		this.cityService.checkCityExist(updateRentRequest.getRentalCityId());
+		this.cityService.checkCityExist(updateRentRequest.getReturnCityId());
 		this.additionalService.checkAllAdditional(updateRentRequest.getAdditionalIds());
-		this.customerService.checkCustomerExists(updateRentRequest.getCustomerId());
+		this.customerService.checkCustomerExist(updateRentRequest.getCustomerId());
 		checkDate(updateRentRequest.getRentalDate(), updateRentRequest.getReturnDate());
 		checkRentalCarCarId(updateRentRequest.getRentalId(),updateRentRequest.getCarId());
 		Rental rent = this.modelMapperService.forRequest().map(updateRentRequest, Rental.class);
@@ -200,7 +203,7 @@ public class RentalManager implements RentalService {
 	@Override
 	public DataResult<GetListRentDto> getByRentId(int rentalId) {
 
-		checkRentCarExists(rentalId);
+		checkRentCarExist(rentalId);
 
 		var result = this.rentDao.getByRentalId(rentalId);
 		GetListRentDto response = this.modelMapperService.forDto().map(result, GetListRentDto.class);
@@ -211,7 +214,7 @@ public class RentalManager implements RentalService {
 	@Override
 	public DataResult<List<ListRentDto>> getByCarCarId(int carId) {
 
-		this.checkRentCarExists(carId);
+		this.checkRentCarExist(carId);
 
 		List<Rental> result = this.rentDao.getByCar_CarId(carId);
 		List<ListRentDto> response = result.stream()
@@ -222,7 +225,7 @@ public class RentalManager implements RentalService {
 	}
 
 	@Override
-	public boolean checkRentCarExists(int rentalId) {
+	public boolean checkRentCarExist(int rentalId) {
 
 		var result = this.rentDao.getByRentalId(rentalId);
 		if (result != null) {
@@ -232,7 +235,7 @@ public class RentalManager implements RentalService {
 	}
 	
 	public boolean checkRentalCarCarId(int rentalId, int carId) {
-		 checkRentCarExists(rentalId);		
+		 checkRentCarExist(rentalId);		
 		 
 		 if(this.rentDao.getByRentalId(rentalId).getCar().getCarId() == carId) {
 			 return true;
@@ -252,7 +255,7 @@ public class RentalManager implements RentalService {
 
 	public long calculatorDaysBetween(int rentalId) {
 
-		checkRentCarExists(rentalId);
+		checkRentCarExist(rentalId);
 		var result = this.rentDao.getByRentalId(rentalId);
 		long daysBetween = ChronoUnit.DAYS.between(result.getRentalDate(), result.getReturnDate());
 		if (daysBetween == 0) {
@@ -263,7 +266,7 @@ public class RentalManager implements RentalService {
 	}
 
 	
-	public double calculatorTotalPrice(int rentalId, List<Integer> additionalServiceId) {
+	public double calculatorTotalPrice(int rentalId, List<Integer> additionalServiceId ) {
 
 		double totalPrice = 0;
 		totalPrice = (this.additionalService.calculateAdditionalServicePrice(additionalServiceId)
@@ -284,7 +287,7 @@ public class RentalManager implements RentalService {
 
 	public boolean checkReturnedInTime(int rentalId, LocalDate returnedTime) {
 
-		checkRentCarExists(rentalId);
+		checkRentCarExist(rentalId);
 		var result = this.rentDao.getByRentalId(rentalId);
 
 		long daysBetween = ChronoUnit.DAYS.between(result.getReturnDate() ,returnedTime);		
@@ -296,7 +299,7 @@ public class RentalManager implements RentalService {
 
 	public double extraPriceCal(int rentalId, List<Integer> additionalServiceId) {
 
-		checkRentCarExists(rentalId);
+		checkRentCarExist(rentalId);
 		var result = this.rentDao.getByRentalId(rentalId);
 
 		double extraPrice = (this.additionalService.calculateAdditionalServicePrice(additionalServiceId)
@@ -338,7 +341,7 @@ public class RentalManager implements RentalService {
 	@Override
 	public Rental returnRental(int rentalId) {
 
-		checkRentCarExists(rentalId);
+		checkRentCarExist(rentalId);
 
 		var returnedRental = this.rentDao.getByRentalId(rentalId);
 		return returnedRental;

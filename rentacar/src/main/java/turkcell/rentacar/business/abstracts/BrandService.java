@@ -21,7 +21,7 @@ public interface BrandService {
 	DataResult<List<ListBrandDto>> getAllSorted(Sort.Direction direction);
 
 	DataResult<ListBrandDto> getByBrandId(int brandId);
-	boolean checkBrandNameExists(String brandName);
-	boolean checkBrandExists(int brandId);
+	boolean checkBrandNameExist(String brandName);
+	boolean checkBrandExist(int brandId);
 
 }

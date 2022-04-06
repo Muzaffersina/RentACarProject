@@ -20,10 +20,9 @@ public interface InvoiceService {
 	DataResult<List<ListInvoiceDto>> getByCustomerId(int customerId);	
 
 	
-	boolean checkInvoiceExists(int invoiceId);
-	double calculatorTotalPrice(int rentalId);
-	double calculatorRentalDays(int rentalId);
-	boolean checkRentalIdExists(int rentalId);
+	boolean checkInvoiceExist(int invoiceId);	
+	boolean checkRentalIdExist(int rentalId);
+	boolean checkPaymentForRentalId(int rentalId);
 	
 	
 	

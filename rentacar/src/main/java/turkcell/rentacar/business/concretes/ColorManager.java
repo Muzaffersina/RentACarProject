@@ -79,7 +79,7 @@ public class ColorManager implements ColorService {
 	@Override
 	public Result add(CreateColorRequest createColorRequest)  {
 		
-		checkColorNameExists(createColorRequest.getColorName());
+		checkColorNameExist(createColorRequest.getColorName());
 		
 		Color color = this.modelMapperService.forRequest().map(createColorRequest, Color.class);
 		color.setColorId(0);
@@ -92,7 +92,7 @@ public class ColorManager implements ColorService {
 	@Override
 	public Result delete(DeleteColorRequest deleteColorRequest)  {
 		
-		checkColorExists(deleteColorRequest.getColorId());		
+		checkColorExist(deleteColorRequest.getColorId());		
 		this.carService.checkColorUsed(deleteColorRequest.getColorId());
 		
 		Color color = this.modelMapperService.forRequest().map(deleteColorRequest, Color.class);
@@ -104,7 +104,7 @@ public class ColorManager implements ColorService {
 	@Override
 	public Result update(UpdateColorRequest updateColorRequest) {
 		
-		checkColorExists(updateColorRequest.getColorId());
+		checkColorExist(updateColorRequest.getColorId());
 		
 		Color color = this.modelMapperService.forRequest().map(updateColorRequest, Color.class);
 		this.colorDao.save(color);
@@ -115,7 +115,7 @@ public class ColorManager implements ColorService {
 	@Override
 	public DataResult<ListColorDto> getByColorId(int colorId)  {
 		
-		checkColorExists(colorId);
+		checkColorExist(colorId);
 		
 		var result = this.colorDao.getByColorId(colorId);		
 		ListColorDto response = this.modelMapperService.forDto().map(result, ListColorDto.class);
@@ -125,7 +125,7 @@ public class ColorManager implements ColorService {
 	}
 	
 	@Override
-	public boolean checkColorNameExists(String colorName)  {
+	public boolean checkColorNameExist(String colorName)  {
 		
 		var result = this.colorDao.getByColorName(colorName);
 		if (result == null) {
@@ -134,7 +134,7 @@ public class ColorManager implements ColorService {
 		throw new BusinessException(Messages.COLORNAMEERROR);
 	}
 	@Override
-	public boolean checkColorExists(int colorId) {
+	public boolean checkColorExist(int colorId) {
 		
 		var result = this.colorDao.getByColorId(colorId);
 		if(result !=null) {

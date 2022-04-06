@@ -23,7 +23,7 @@ public interface CarService {
 	DataResult<List<ListCarDto>> getAllSorted(Sort.Direction direction);
 	DataResult<List<ListCarDto>> getByDailyPriceLessThanEqual(double dailyPrice);
 	
-	boolean checkCarExists(int carId);
+	boolean checkCarExist(int carId);
 	
 	double calculateRentalPrice(int carId);
 	double checkDailyKm(int carId);	

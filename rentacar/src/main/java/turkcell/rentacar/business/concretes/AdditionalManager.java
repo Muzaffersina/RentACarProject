@@ -48,7 +48,7 @@ public class AdditionalManager implements AdditionalService {
 	@Override
 	public Result add(CreateAdditionalRequest createAdditionalRequest) {
 
-		checkAdditionalNameExists(createAdditionalRequest.getAdditionalName());
+		checkAdditionalNameExist(createAdditionalRequest.getAdditionalName());
 
 		Additional additional = this.modelMapperService.forRequest().map(createAdditionalRequest, Additional.class);
 		this.additionalDao.save(additional);
@@ -59,7 +59,7 @@ public class AdditionalManager implements AdditionalService {
 	@Override
 	public Result delete(DeleteAdditionalRequest deleteAdditionalRequest) {
 
-		checkAdditionalExists(deleteAdditionalRequest.getAdditionalServiceId());		
+		checkAdditionalExist(deleteAdditionalRequest.getAdditionalServiceId());		
 		this.orderedAdditionalService.checkUsedAdditionalId(deleteAdditionalRequest.getAdditionalServiceId());
 		
 		this.additionalDao.deleteById(deleteAdditionalRequest.getAdditionalServiceId()); 
@@ -70,7 +70,7 @@ public class AdditionalManager implements AdditionalService {
 	@Override
 	public Result update(UpdateAdditionalRequest updateAdditionalRequest) {
 
-		checkAdditionalExists(updateAdditionalRequest.getAdditionalServiceId());		
+		checkAdditionalExist(updateAdditionalRequest.getAdditionalServiceId());		
 
 		Additional additional = this.modelMapperService.forRequest().map(updateAdditionalRequest, Additional.class);
 		this.additionalDao.save(additional);
@@ -118,7 +118,7 @@ public class AdditionalManager implements AdditionalService {
 	@Override
 	public DataResult<ListAdditionalDto> getById(int additionalId) {
 
-		checkAdditionalExists(additionalId);
+		checkAdditionalExist(additionalId);
 
 		var result = this.additionalDao.getById(additionalId);
 		ListAdditionalDto response = this.modelMapperService.forDto().map(result, ListAdditionalDto.class);
@@ -131,14 +131,14 @@ public class AdditionalManager implements AdditionalService {
 
 		for (int additionalId : additionalIds) {
 			if (additionalId != 0) {
-				checkAdditionalExists(additionalId);
+				checkAdditionalExist(additionalId);
 			}
 		}
 
 	}
 
 	@Override
-	public boolean checkAdditionalExists(int additionalId) {
+	public boolean checkAdditionalExist(int additionalId) {
 
 		if (!this.additionalDao.existsById(additionalId)) {			
 			throw new BusinessException(Messages.ADDITIONALSERVICENOTFOUND);
@@ -160,7 +160,7 @@ public class AdditionalManager implements AdditionalService {
 	}
 
 	@Override
-	public boolean checkAdditionalNameExists(String additionalName) {
+	public boolean checkAdditionalNameExist(String additionalName) {
 		
 		var result = this.additionalDao.getByAdditionalName(additionalName);
 		if(result == null) {

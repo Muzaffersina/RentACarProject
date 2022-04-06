@@ -51,7 +51,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	@Override
 	public Result add(CreateCarMaintenanceRequest createCarMaintenanceRequest) {
 
-		this.carService.checkCarExists(createCarMaintenanceRequest.getCarId());
+		this.carService.checkCarExist(createCarMaintenanceRequest.getCarId());
 		this.rentService.checkRentCarDate(createCarMaintenanceRequest.getCarId());
 
 		CarMaintenance carMaintenance = this.modelMapperService.forRequest().map(createCarMaintenanceRequest,
@@ -66,7 +66,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	@Override
 	public Result delete(DeleteCarMaintenanceRequest deleteCarMaintenanceRequest) {
 
-		checkCarMaintenanceExists(deleteCarMaintenanceRequest.getMaintenanceId());
+		checkCarMaintenanceExist(deleteCarMaintenanceRequest.getMaintenanceId());
 		checkCarMaintenceReturnDate(deleteCarMaintenanceRequest.getMaintenanceId());
 		CarMaintenance carMaintenance = this.modelMapperService.forRequest().map(deleteCarMaintenanceRequest,
 				CarMaintenance.class);
@@ -79,8 +79,8 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	@Override
 	public Result update(UpdateCarMaintenanceRequest updateCarMaintenanceRequest) {
 
-		checkCarMaintenanceExists(updateCarMaintenanceRequest.getMaintenanceId());
-		this.carService.checkCarExists(updateCarMaintenanceRequest.getCarId());
+		checkCarMaintenanceExist(updateCarMaintenanceRequest.getMaintenanceId());
+		this.carService.checkCarExist(updateCarMaintenanceRequest.getCarId());
 
 		CarMaintenance carMaintenance = this.modelMapperService.forRequest().map(updateCarMaintenanceRequest,
 				CarMaintenance.class);
@@ -131,7 +131,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	@Override
 	public DataResult<GetListCarMaintenanceDto> getByMaintenanceId(int carMaintenanceId) {
 
-		checkCarMaintenanceExists(carMaintenanceId);
+		checkCarMaintenanceExist(carMaintenanceId);
 
 		var result = this.carMaintenanceDao.getById(carMaintenanceId);
 		GetListCarMaintenanceDto response = this.modelMapperService.forDto().map(result,
@@ -144,8 +144,8 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	@Override
 	public DataResult<List<ListCarMaintenanceDto>> getByCar_CarId(int carId) {
 
-		this.carService.checkCarExists(carId);
-		checkCarMaintenanceCar_CarIdExists(carId);
+		this.carService.checkCarExist(carId);
+		checkCarMaintenanceCar_CarIdExist(carId);
 
 		List<CarMaintenance> result = this.carMaintenanceDao.getByCar_CarId(carId); // ??
 		List<ListCarMaintenanceDto> response = result.stream().map(
@@ -156,7 +156,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	}
 
 	@Override
-	public boolean checkCarMaintenanceCar_CarIdExists(int carId) {
+	public boolean checkCarMaintenanceCar_CarIdExist(int carId) {
 
 		var result = this.carMaintenanceDao.getById(carId);
 		if (result != null) {
@@ -166,7 +166,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	}
 
 	@Override
-	public boolean checkCarMaintenanceExists(int carMaintenanceId) {
+	public boolean checkCarMaintenanceExist(int carMaintenanceId) {
 
 		var result = this.carMaintenanceDao.getByMaintenanceId(carMaintenanceId);
 		if (result != null) {
@@ -191,7 +191,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	@Override
 	public boolean checkCarMaintenceReturnDate(int maintenanceId) {
 
-		checkCarMaintenanceExists(maintenanceId);
+		checkCarMaintenanceExist(maintenanceId);
 
 		var result = this.carMaintenanceDao.getByMaintenanceId(maintenanceId);
 		if (result != null) {

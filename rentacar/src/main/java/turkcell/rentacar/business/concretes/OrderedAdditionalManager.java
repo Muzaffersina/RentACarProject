@@ -44,8 +44,8 @@ public class OrderedAdditionalManager implements OrderedAdditionalService {
 	@Override
 	public Result add(CreateOrderedAdditionalRequest createOrderedAdditionalRequest) {
 
-		this.rentalService.checkRentCarExists(createOrderedAdditionalRequest.getRentalId());
-		this.additionalService.checkAdditionalExists(createOrderedAdditionalRequest.getAdditionalId());
+		this.rentalService.checkRentCarExist(createOrderedAdditionalRequest.getRentalId());
+		this.additionalService.checkAdditionalExist(createOrderedAdditionalRequest.getAdditionalId());
 
 		OrderedAdditional orderedAdditional = this.modelMapperService.forRequest().map(createOrderedAdditionalRequest,
 				OrderedAdditional.class);
@@ -70,8 +70,8 @@ public class OrderedAdditionalManager implements OrderedAdditionalService {
 	@Override
 	public Result update(UpdateOrderedAdditionalRequest updateOrderedAdditionalRequest) {
 
-		this.rentalService.checkRentCarExists(updateOrderedAdditionalRequest.getRentalId());
-		this.additionalService.checkAdditionalExists(updateOrderedAdditionalRequest.getAdditionalId());
+		this.rentalService.checkRentCarExist(updateOrderedAdditionalRequest.getRentalId());
+		this.additionalService.checkAdditionalExist(updateOrderedAdditionalRequest.getAdditionalId());
 
 
 		OrderedAdditional orderedAdditional = this.modelMapperService.forRequest().map(updateOrderedAdditionalRequest, OrderedAdditional.class);
@@ -106,7 +106,7 @@ public class OrderedAdditionalManager implements OrderedAdditionalService {
 	@Override
 	public boolean checkAdditionalId(int additionalId) {
 
-		var result = this.additionalService.checkAdditionalExists(additionalId);
+		var result = this.additionalService.checkAdditionalExist(additionalId);
 		if (result) {
 			return true;
 		}

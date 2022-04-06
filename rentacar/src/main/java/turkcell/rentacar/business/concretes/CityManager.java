@@ -44,7 +44,7 @@ public class CityManager implements CityService {
 	@Override
 	public Result add(CreateCityRequest createCityRequest) {
 
-		checkCityNameExists(createCityRequest.getCityName());
+		checkCityNameExist(createCityRequest.getCityName());
 
 		City city = this.modelMapperService.forRequest().map(createCityRequest, City.class);
 		this.cityDao.save(city);
@@ -55,7 +55,7 @@ public class CityManager implements CityService {
 	@Override
 	public Result delete(DeleteCityRequest deleteCityRequest)  {
 
-		checkCityExists(deleteCityRequest.getCityId());
+		checkCityExist(deleteCityRequest.getCityId());
 			
 		
 		City city= this.modelMapperService.forRequest().map(deleteCityRequest, City.class);
@@ -67,7 +67,7 @@ public class CityManager implements CityService {
 	@Override
 	public Result update(UpdateCityRequest updateCityRequest){
 		
-		checkCityExists(updateCityRequest.getCityId());
+		checkCityExist(updateCityRequest.getCityId());
 		City city = this.modelMapperService.forRequest().map(updateCityRequest, City.class);
 		this.cityDao.save(city);
 
@@ -114,7 +114,7 @@ public class CityManager implements CityService {
 
 	@Override
 	public DataResult<ListCityDto> getById(int cityId){
-		checkCityExists(cityId);
+		checkCityExist(cityId);
 
 		var result = this.cityDao.getById(cityId);
 		ListCityDto response = this.modelMapperService.forDto().map(result, ListCityDto.class);
@@ -123,7 +123,7 @@ public class CityManager implements CityService {
 	}
 
 	@Override
-	public boolean checkCityExists(int cityId)  {
+	public boolean checkCityExist(int cityId)  {
 
 		if (!this.cityDao.existsById(cityId)) {
 			throw new BusinessException(Messages.CITYNOTFOUND);
@@ -132,7 +132,7 @@ public class CityManager implements CityService {
 	}
 
 	@Override
-	public boolean checkCityNameExists(String cityName) {
+	public boolean checkCityNameExist(String cityName) {
 
 		var result = this.cityDao.getByCityName(cityName);
 		if (result == null) {

@@ -29,7 +29,7 @@ public interface RentalService {
 	DataResult<List<ListRentDto>> getByCarCarId(int carId) ;
 	
 	
-	boolean checkRentCarExists(int rentalId);
+	boolean checkRentCarExist(int rentalId);
 	boolean checkRentCarDate(int carId);
 	boolean checkCarUsed(int carId);	
 	boolean checkCustomerUsed(int customerId);	

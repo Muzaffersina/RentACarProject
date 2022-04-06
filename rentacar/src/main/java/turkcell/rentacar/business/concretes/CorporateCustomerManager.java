@@ -54,7 +54,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	@Override
 	public Result delete(DeleteCorporateCustomerRequest deleteCorporateCustomerRequest) {
 		
-		checkCorporateCustomerExists(deleteCorporateCustomerRequest.getCustomerId());
+		checkCorporateCustomerExist(deleteCorporateCustomerRequest.getCustomerId());
 		this.rentalService.checkCustomerUsed(deleteCorporateCustomerRequest.getCustomerId());
 		
 		CorporateCustomer corporateCustomer = this.modelMapperService.forRequest()
@@ -68,7 +68,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	@Override
 	public Result update(UpdateCorporateCustomerRequest updateCorporateCustomerRequest) {
 		
-		checkCorporateCustomerExists(updateCorporateCustomerRequest.getCustomerId());
+		checkCorporateCustomerExist(updateCorporateCustomerRequest.getCustomerId());
 		//vergi no gerçekte kontrol.
 		CorporateCustomer corporateCustomer = this.modelMapperService.forRequest()
 				.map(updateCorporateCustomerRequest, CorporateCustomer.class);
@@ -92,7 +92,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	@Override
 	public DataResult<ListCorporateCustomerDto> getById(int id) {
 
-		checkCorporateCustomerExists(id);
+		checkCorporateCustomerExist(id);
 		
 		CorporateCustomer result = this.corporateCustomerDao.getById(id);		
 	
@@ -102,7 +102,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	}
 
 	@Override
-	public boolean checkCorporateCustomerExists(int id) {
+	public boolean checkCorporateCustomerExist(int id) {
 		
 		var result = this.corporateCustomerDao.existsById(id);
 		if (result) {

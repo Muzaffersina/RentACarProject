@@ -44,6 +44,7 @@ public class Messages {
 	public static final String CARDAMAGELIST = "carDamage.listed";	
 	public static final String CARDAMAGEFOUND = "carDamage.found";
 	public static final String CARDAMAGENOTFOUND = "carDamage.not.found";	
+	public static final String CARDAMAGEALREADYEXISTS ="carDamage.already.exists";
 	
 	
 	
@@ -57,13 +58,13 @@ public class Messages {
 	public static final String CARMAINTENANCENOTUSE = "carMaintenance.not.use";
 	public static final String CARMAINTENANCEALREADYEXISTS ="carMaintenance.already.exists";
 	
-	public static final String CARADD = "carDamage.added";
-	public static final String CARUPDATE = "carDamage.update";
-	public static final String CARDELETE = "carDamage.deleted";
-	public static final String CARLIST = "carDamage.listed";
-	public static final String CARLISTFORPRICE = "carDamage.listed.for.price";
-	public static final String CARFOUND = "carDamage.found";
-	public static final String CARNOTFOUND = "carDamage.not.found";	
+	public static final String CARADD = "car.added";
+	public static final String CARUPDATE = "car.update";
+	public static final String CARDELETE = "car.deleted";
+	public static final String CARLIST = "car.listed";
+	public static final String CARLISTFORPRICE = "car.listed.for.price";
+	public static final String CARFOUND = "car.found";
+	public static final String CARNOTFOUND = "car.not.found";	
 	public static final String CARNOTDELETE = "carDamage.not.delete";	
 	
 	
@@ -107,6 +108,7 @@ public class Messages {
 	public static final String INVOICEFOUND = "invoice.found";
 	public static final String INVOICENOTFOUND = "invoice.not.found";	
 	public static final String INVOICELISTFORPRICE = "invoice.listed.for.date";	
+	public static final String INVOICENOTDELETE = "invoice.can.not.delete";
 	
 	public static final String ORDEREDADDITIONALSERVICEADD = "orderedAdditionalService.added";
 	public static final String ORDEREDADDITIONALSERVICEUPDATE = "orderedAdditionalService.update";
@@ -127,13 +129,14 @@ public class Messages {
 	public static final String PAYMENTLIST = "payment.listed";	
 	public static final String PAYMENTNOTFOUND = "payment.not.found";	
 	
+	
 	public static final String RENTALADD = "rental.added";
 	public static final String RENTALUPDATE = "rental.update";
 	public static final String RENTALDELETE = "rental.deleted";
 	public static final String RENTALLIST = "rental.listed";	
 	public static final String RENTALFOUND = "rental.found";
 	public static final String RENTALNOTFOUND = "rental.not.found";
-	public static final String RENTALNOTDELETE = "rental.not.delete";
+	public static final String RENTALNOTDELETE = "rental.can.not.delete";
 	public static final String RENTALALREADYEXISTS ="rental.already.exists";
 	public static final String RENTALDATESNOTVALİD ="rental.dates.are.not.valid";
 	public static final String RENTALEXİSTSININVOICE= "rental.car.id.exists.in.invoice";
