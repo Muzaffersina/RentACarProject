@@ -83,7 +83,7 @@ public class OrderedAdditionalManager implements OrderedAdditionalService {
 	@Override
 	public DataResult<List<ListOrderedAdditionalDto>> getAll() {
 
-		var result = this.orderedAdditionalDao.findAll();
+		List<OrderedAdditional> result = this.orderedAdditionalDao.findAll();
 
 		List<ListOrderedAdditionalDto> response = result.stream().map(orderedAdditional -> this.modelMapperService
 				.forDto().map(orderedAdditional, ListOrderedAdditionalDto.class)).collect(Collectors.toList());
@@ -103,11 +103,9 @@ public class OrderedAdditionalManager implements OrderedAdditionalService {
 		return new SuccessDataResult<List<ListOrderedAdditionalDto>>(response, Messages.ORDEREDADDITIONALSERVICELIST);
 	}
 
-	@Override
-	public boolean checkAdditionalId(int additionalId) {
+	private boolean checkAdditionalId(int additionalId) {
 
-		var result = this.additionalService.checkAdditionalExist(additionalId);
-		if (result) {
+		if (this.additionalService.checkAdditionalExist(additionalId)) {
 			return true;
 		}
 		throw new BusinessException(Messages.ORDEREDADDITIONALSERVICENOTFOUND);
@@ -116,14 +114,14 @@ public class OrderedAdditionalManager implements OrderedAdditionalService {
 	@Override
 	public boolean checkUsedAdditionalId(int additionalId) {
 
-		var result = this.orderedAdditionalDao.getByAdditional_AdditionalId(additionalId);
+		List<OrderedAdditional> result = this.orderedAdditionalDao.getByAdditional_AdditionalId(additionalId);
 		if (result == null) {
 			return true;
 		}
 		throw new BusinessException(Messages.ORDEREDADDITIONALSERVICENOTDELETE);
 	}
 	
-	/*
+	
 	@Override
 	public void saveOrderedAdditional(List<Integer> additionalIds, int rentalId) {
 		
@@ -136,5 +134,5 @@ public class OrderedAdditionalManager implements OrderedAdditionalService {
 			}			
 		}
 	}
-	*/
+	
 }

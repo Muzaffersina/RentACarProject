@@ -40,7 +40,7 @@ public class IndividualCustomerManager implements IndividualCustomerService{
 	public Result add(CreateIndividualCustomerRequest createIndividualCustomerRequest)  {	
 		
 		checkIndividualCustomerIdendityNumber(createIndividualCustomerRequest.getIdentityNumber());
-		// gercek kisimi mernis sorgu
+		
 		IndividualCustomer individualCustomer = this.modelMapperService.forRequest().map(createIndividualCustomerRequest, IndividualCustomer.class);
 		this.individualCustomerDao.save(individualCustomer);
 		
@@ -65,7 +65,7 @@ public class IndividualCustomerManager implements IndividualCustomerService{
 	public Result update(UpdateIndividualCustomerRequest updateIndividualCustomerRequest)  {
 		
 		checkIndividualCustomerExist(updateIndividualCustomerRequest.getCustomerId());
-		// gercek kisimi mernis sorgu
+		
 		IndividualCustomer individualCustomer = this.modelMapperService.forRequest()
 				.map(updateIndividualCustomerRequest, IndividualCustomer.class);
 		this.individualCustomerDao.save(individualCustomer);
@@ -78,7 +78,7 @@ public class IndividualCustomerManager implements IndividualCustomerService{
 	@Override
 	public DataResult<List<ListIndividualCustomerDto>> getAll() {
 		
-		var result = this.individualCustomerDao.findAll();
+		List<IndividualCustomer> result = this.individualCustomerDao.findAll();
 		
 		List<ListIndividualCustomerDto> response = result.stream()
 				.map(individualCustomer -> this.modelMapperService.forDto().map(individualCustomer, ListIndividualCustomerDto.class))
@@ -100,19 +100,19 @@ public class IndividualCustomerManager implements IndividualCustomerService{
 		
 	}
 
-	@Override
-	public boolean checkIndividualCustomerExist(int id) {
-		var result = this.individualCustomerDao.existsById(id);
-		if (result) {
+	
+		private boolean checkIndividualCustomerExist(int id) {
+			
+		if (this.individualCustomerDao.existsById(id)) {
 			return true;
 		}
 		throw new BusinessException(Messages.INDIVIDUALCUSTOMERNOTFOUND);
 	}
 
-	@Override
-	public boolean checkIndividualCustomerIdendityNumber(int idendityNumber) {
-		
-		var result = this.individualCustomerDao.getByIdendityNumber(idendityNumber);
+
+	 private boolean checkIndividualCustomerIdendityNumber(int idendityNumber) {
+				
+		IndividualCustomer result = this.individualCustomerDao.getByIdendityNumber(idendityNumber);
 		if(result == null) {
 			return true;
 		}

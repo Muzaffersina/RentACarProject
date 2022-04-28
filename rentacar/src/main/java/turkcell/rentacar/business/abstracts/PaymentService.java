@@ -18,6 +18,6 @@ public interface PaymentService {
 	DataResult<List<ListPaymentDto>> getAllPaged(int pageNo, int pageSize);
 	DataResult<List<ListPaymentDto>> getByRentalId(int rentalId);
 
-	boolean checkPaymentExist(int paymentId);	
+	
 	boolean checkPaymentForRentalId(int rentalId);
 }

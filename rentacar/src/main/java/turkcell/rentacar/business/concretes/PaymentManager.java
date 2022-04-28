@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import turkcell.rentacar.business.abstracts.InvoiceService;
 import turkcell.rentacar.business.abstracts.PaymentInfoService;
 import turkcell.rentacar.business.abstracts.PaymentService;
 import turkcell.rentacar.business.abstracts.RentalService;
@@ -34,38 +34,34 @@ public class PaymentManager implements PaymentService {
 	private ModelMapperService modelMapperService;
 	private PaymentDao paymentDao;
 	private RentalService rentalService;
-	private InvoiceService invoiceService;
 	private BankAdapterService bankAdapterService;
 	private PaymentInfoService paymentInfoService;
 
 	@Autowired
 	public PaymentManager(ModelMapperService modelMapperService, PaymentDao paymentDao, RentalService rentalService,
-			BankAdapterService bankAdapterService , PaymentInfoService paymentInfoService , InvoiceService invoiceService) {
+			BankAdapterService bankAdapterService, PaymentInfoService paymentInfoService) {
 		this.modelMapperService = modelMapperService;
 		this.paymentDao = paymentDao;
 		this.rentalService = rentalService;
 		this.bankAdapterService = bankAdapterService;
-		this.paymentInfoService = paymentInfoService;
-		this.invoiceService = invoiceService;
+		this.paymentInfoService = paymentInfoService;		
 	}
-	
-	// iş kuraları sonra eklenecek
-	
+
 	@Override
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = BusinessException.class)
 	public Result add(CreatePaymentRequest createPaymentRequest) {
 
 		this.rentalService.checkRentCarExist(createPaymentRequest.getRentalId());
 		
-		this.bankAdapterService.checkIfLimitIsEnough(createPaymentRequest.getCreatePaymentInfoRequest(),false);
+		this.bankAdapterService.checkIfLimitIsEnough(createPaymentRequest.getCreatePaymentInfoRequest(), true); // 
+		//this.bankAdapterService.checkIfLimitIsEnough(createPaymentRequest.getCreatePaymentInfoRequest(), false);
+
 		checkRememberMe(createPaymentRequest);
-		
-			
+
 		Payment payment = this.modelMapperService.forRequest().map(createPaymentRequest, Payment.class);
 		payment.setTotalPayment(calculatorTotalPrice(createPaymentRequest.getRentalId()));
 		payment.setPaymentId(0);
-		
-		
+
 		this.paymentDao.save(payment);
 
 		return new SuccessResult(Messages.PAYMENTADD);
@@ -81,7 +77,6 @@ public class PaymentManager implements PaymentService {
 
 		return new SuccessResult(Messages.PAYMENTDELETE);
 	}
-	
 
 	@Override
 	public DataResult<List<ListPaymentDto>> getAll() {
@@ -107,51 +102,49 @@ public class PaymentManager implements PaymentService {
 		return new SuccessDataResult<List<ListPaymentDto>>(response, Messages.PAYMENTLIST);
 	}
 
-	@Override 
+	@Override
 	public DataResult<List<ListPaymentDto>> getByRentalId(int rentalId) {
 
 		this.rentalService.checkRentCarExist(rentalId);
 
-		List<Payment> result = this.paymentDao.getAllByRental_RentalId(rentalId);		
+		List<Payment> result = this.paymentDao.getAllByRental_RentalId(rentalId);
 		List<ListPaymentDto> response = result.stream()
 				.map(payment -> this.modelMapperService.forDto().map(payment, ListPaymentDto.class))
 				.collect(Collectors.toList());
-		
-		return new SuccessDataResult<List<ListPaymentDto>>(response , Messages.PAYMENTLIST);
+
+		return new SuccessDataResult<List<ListPaymentDto>>(response, Messages.PAYMENTLIST);
 	}
 
-	@Override
-	public boolean checkPaymentExist(int paymentId) {
-		
+	private boolean checkPaymentExist(int paymentId) {
+
 		if (this.paymentDao.existsById(paymentId)) {
 			return true;
 		}
 		throw new BusinessException(Messages.PAYMENTNOTFOUND);
 	}
 
-	
-	public double calculatorTotalPrice(int rentalId) {
+	private double calculatorTotalPrice(int rentalId) {
 
-		var returnedRental = this.rentalService.returnRental(rentalId);
-
-		return returnedRental.getTotalPrice();
+		return this.rentalService.returnRental(rentalId).getTotalPrice();
 	}
 
-	public boolean checkRememberMe(CreatePaymentRequest createPaymentRequest) {
-		
+	private boolean checkRememberMe(CreatePaymentRequest createPaymentRequest) {
+
 		if (createPaymentRequest.isRememberMe()) {
 			this.paymentInfoService.save(createPaymentRequest.getCreatePaymentInfoRequest());
 		}
 		return true;
-	}	
-	
+	}
+
 	public boolean checkPaymentForRentalId(int rentalId) {
-		
+
 		this.rentalService.checkRentCarExist(rentalId);
 
-		if(this.paymentDao.getAllByRental_RentalId(rentalId).isEmpty()) {
-			return true;			
+		if (this.paymentDao.getAllByRental_RentalId(rentalId).isEmpty()) {
+			return true;
 		}
-		return false;			
+		return false;
 	}
+
+
 }

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreatePaymentInfoRequest {	
 	
+	
 	@NotNull
 	private String cardNo;
 	

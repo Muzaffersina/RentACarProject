@@ -69,7 +69,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	public Result update(UpdateCorporateCustomerRequest updateCorporateCustomerRequest) {
 		
 		checkCorporateCustomerExist(updateCorporateCustomerRequest.getCustomerId());
-		//vergi no gerçekte kontrol.
+		
 		CorporateCustomer corporateCustomer = this.modelMapperService.forRequest()
 				.map(updateCorporateCustomerRequest, CorporateCustomer.class);
 		this.corporateCustomerDao.save(corporateCustomer);
@@ -80,7 +80,7 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 	@Override
 	public DataResult<List<ListCorporateCustomerDto>> getAll() {
 		
-		var result = this.corporateCustomerDao.findAll();
+		List<CorporateCustomer> result = this.corporateCustomerDao.findAll();
 		
 		List<ListCorporateCustomerDto> response = result.stream()
 				.map(corporateCustomer -> this.modelMapperService.forDto().map(corporateCustomer, ListCorporateCustomerDto.class))
@@ -101,19 +101,20 @@ public class CorporateCustomerManager implements CorporateCustomerService {
 		return new SuccessDataResult<ListCorporateCustomerDto>(response,Messages.CORPORATECUSTOMERLIST);
 	}
 
-	@Override
-	public boolean checkCorporateCustomerExist(int id) {
+	private boolean checkCorporateCustomerExist(int id) {
 		
-		var result = this.corporateCustomerDao.existsById(id);
+		boolean result = this.corporateCustomerDao.existsById(id);
 		if (result) {
 			return true;
 		}
 		throw new BusinessException(Messages.CORPORATECUSTOMERNOTFOUND);
 	}
 
-	@Override
-	public boolean checkCorporateCustomerTaxNumber(int taxNumber) {
-		var result = this.corporateCustomerDao.getByTaxNumber(taxNumber);
+	
+	private boolean checkCorporateCustomerTaxNumber(int taxNumber) {
+		
+		CorporateCustomer result = this.corporateCustomerDao.getByTaxNumber(taxNumber);
+		
 		if (result == null) {
 			return true; 
 		}

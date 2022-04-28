@@ -81,7 +81,7 @@ public class AdditionalManager implements AdditionalService {
 	@Override
 	public DataResult<List<ListAdditionalDto>> getAll() {
 
-		var result = this.additionalDao.findAll();
+		List<Additional> result = this.additionalDao.findAll();
 		List<ListAdditionalDto> response = result.stream()
 				.map(additional -> this.modelMapperService.forDto().map(additional, ListAdditionalDto.class))
 				.collect(Collectors.toList());
@@ -120,8 +120,8 @@ public class AdditionalManager implements AdditionalService {
 
 		checkAdditionalExist(additionalId);
 
-		var result = this.additionalDao.getById(additionalId);
-		ListAdditionalDto response = this.modelMapperService.forDto().map(result, ListAdditionalDto.class);
+		Additional results = this.additionalDao.getById(additionalId);
+		ListAdditionalDto response = this.modelMapperService.forDto().map(results, ListAdditionalDto.class);
 
 		return new SuccessDataResult<ListAdditionalDto>(response,Messages.ADDITIONALSERVICEFOUND);
 	}
@@ -159,10 +159,10 @@ public class AdditionalManager implements AdditionalService {
 		return additionalServicePrice;
 	}
 
-	@Override
-	public boolean checkAdditionalNameExist(String additionalName) {
+
+	private boolean checkAdditionalNameExist(String additionalName) {
 		
-		var result = this.additionalDao.getByAdditionalName(additionalName);
+		Additional result = this.additionalDao.getByAdditionalName(additionalName);
 		if(result == null) {
 			return true;
 		}

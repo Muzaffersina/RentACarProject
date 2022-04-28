@@ -18,6 +18,5 @@ public interface CorporateCustomerService {
 	DataResult<List<ListCorporateCustomerDto>> getAll();
 	DataResult<ListCorporateCustomerDto> getById(int id);
 	
-	boolean checkCorporateCustomerExist(int id);
-	boolean checkCorporateCustomerTaxNumber(int taxNumber);
+
 }

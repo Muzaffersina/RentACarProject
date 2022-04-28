@@ -107,7 +107,7 @@ public class Messages {
 	public static final String INVOICELIST = "invoice.listed";	
 	public static final String INVOICEFOUND = "invoice.found";
 	public static final String INVOICENOTFOUND = "invoice.not.found";	
-	public static final String INVOICELISTFORPRICE = "invoice.listed.for.date";	
+	public static final String INVOICELISTFORDATE = "invoice.listed.for.date";	
 	public static final String INVOICENOTDELETE = "invoice.can.not.delete";
 	
 	public static final String ORDEREDADDITIONALSERVICEADD = "orderedAdditionalService.added";
@@ -134,6 +134,7 @@ public class Messages {
 	public static final String RENTALUPDATE = "rental.update";
 	public static final String RENTALDELETE = "rental.deleted";
 	public static final String RENTALLIST = "rental.listed";	
+	public static final String RENTALLISTFORCAR = "rental.listed.for.carId";	
 	public static final String RENTALFOUND = "rental.found";
 	public static final String RENTALNOTFOUND = "rental.not.found";
 	public static final String RENTALNOTDELETE = "rental.can.not.delete";

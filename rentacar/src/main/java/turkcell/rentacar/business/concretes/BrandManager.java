@@ -43,7 +43,8 @@ public class BrandManager implements BrandService {
 
 	@Override
 	public DataResult<List<ListBrandDto>> getAll() {
-		var result = this.brandDao.findAll();
+		
+		List<Brand> result = this.brandDao.findAll();
 		
 		List<ListBrandDto> response = result.stream()
 				.map(brand -> this.modelMapperService.forDto().map(brand, ListBrandDto.class))
@@ -120,7 +121,7 @@ public class BrandManager implements BrandService {
 		
 		checkBrandExist(brandId);
 		
-		var result = this.brandDao.getByBrandId(brandId);
+		Brand result = this.brandDao.getByBrandId(brandId);
 		ListBrandDto response = this.modelMapperService.forDto().map(result, ListBrandDto.class);
 		
 		return new SuccessDataResult<ListBrandDto>(response, Messages.BRANDFOUND);
@@ -130,7 +131,7 @@ public class BrandManager implements BrandService {
 	@Override
 	public boolean checkBrandNameExist(String brandName) {
 		
-		var result = this.brandDao.getByBrandName(brandName);
+		Brand result = this.brandDao.getByBrandName(brandName);
 		if (result == null) {
 			return true;
 		}
@@ -140,7 +141,7 @@ public class BrandManager implements BrandService {
 	@Override
 	public boolean checkBrandExist(int brandId) {
 		
-		var result = this.brandDao.getByBrandId(brandId);
+		Brand result = this.brandDao.getByBrandId(brandId);
 		if (result != null) {
 			return true;
 		}

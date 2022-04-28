@@ -32,7 +32,7 @@ public class CustomerManager implements CustomerService {
 	@Override
 	public DataResult<List<ListCustomerDto>> getAll() {
 		
-		var result = this.customerDao.findAll();
+		List<Customer> result = this.customerDao.findAll();
 		
 		List<ListCustomerDto> response = result.stream()
 				.map(customer -> this.modelMapperService.forDto().map(customer, ListCustomerDto.class))
@@ -55,8 +55,7 @@ public class CustomerManager implements CustomerService {
 	@Override
 	public boolean checkCustomerExist(int id) {
 		
-		var result = this.customerDao.existsById(id);
-		if (result) {
+		if (this.customerDao.existsById(id)) {
 			return true;
 		}
 		throw new BusinessException(Messages.CUSTOMERNOTFOUND);

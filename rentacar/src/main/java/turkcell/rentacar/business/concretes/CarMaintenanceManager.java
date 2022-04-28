@@ -133,7 +133,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 
 		checkCarMaintenanceExist(carMaintenanceId);
 
-		var result = this.carMaintenanceDao.getById(carMaintenanceId);
+		CarMaintenance result = this.carMaintenanceDao.getById(carMaintenanceId);
 		GetListCarMaintenanceDto response = this.modelMapperService.forDto().map(result,
 				GetListCarMaintenanceDto.class);
 
@@ -155,20 +155,20 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 		return new SuccessDataResult<List<ListCarMaintenanceDto>>(response,Messages.CARMAINTENANCELIST);
 	}
 
-	@Override
-	public boolean checkCarMaintenanceCar_CarIdExist(int carId) {
 
-		var result = this.carMaintenanceDao.getById(carId);
+	private boolean checkCarMaintenanceCar_CarIdExist(int carId) {
+
+		CarMaintenance result = this.carMaintenanceDao.getById(carId);
 		if (result != null) {
 			return true;
 		}
 		throw new BusinessException(Messages.CARMAINTENANCENOTFOUND);
 	}
 
-	@Override
-	public boolean checkCarMaintenanceExist(int carMaintenanceId) {
 
-		var result = this.carMaintenanceDao.getByMaintenanceId(carMaintenanceId);
+	private boolean checkCarMaintenanceExist(int carMaintenanceId) {
+
+		CarMaintenance result = this.carMaintenanceDao.getByMaintenanceId(carMaintenanceId);
 		if (result != null) {
 			return true;
 		}
@@ -178,7 +178,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	@Override
 	public boolean checkCarMaintenceCar_CarIdReturnDate(int carId) {
 
-		var result = this.carMaintenanceDao.getByCar_CarId(carId);
+		List<CarMaintenance> result = this.carMaintenanceDao.getByCar_CarId(carId);
 
 		for (CarMaintenance carMaintenance : result) {
 			if (carMaintenance.getReturnDate() == null) {
@@ -188,12 +188,12 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 		return true;
 	}
 
-	@Override
-	public boolean checkCarMaintenceReturnDate(int maintenanceId) {
+	
+	private boolean checkCarMaintenceReturnDate(int maintenanceId) {
 
 		checkCarMaintenanceExist(maintenanceId);
 
-		var result = this.carMaintenanceDao.getByMaintenanceId(maintenanceId);
+		CarMaintenance result = this.carMaintenanceDao.getByMaintenanceId(maintenanceId);
 		if (result != null) {
 			if (result.getReturnDate() == null) {
 
@@ -207,7 +207,7 @@ public class CarMaintenanceManager implements CarMaintenanceService {
 	@Override
 	public boolean checkCarUsed(int carId) {
 
-		var result = this.carMaintenanceDao.getCarMaintenanceByCarCarIdAndReturnDateIsNull(carId);
+		CarMaintenance result = this.carMaintenanceDao.getCarMaintenanceByCarCarIdAndReturnDateIsNull(carId);
 		if (result != null) {
 			throw new BusinessException(Messages.CARMAINTENANCENOTDELETE);
 		}

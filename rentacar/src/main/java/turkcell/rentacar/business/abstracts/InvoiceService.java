@@ -18,9 +18,7 @@ public interface InvoiceService {
 	DataResult<List<ListInvoiceDto>> getAll();
 	DataResult<List<ListInvoiceDto>> getByDate(LocalDate rentalDate , LocalDate returnDate);
 	DataResult<List<ListInvoiceDto>> getByCustomerId(int customerId);	
-
 	
-	boolean checkInvoiceExist(int invoiceId);	
 	boolean checkRentalIdExist(int rentalId);
 	boolean checkPaymentForRentalId(int rentalId);
 	

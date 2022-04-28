@@ -14,9 +14,11 @@ public interface PaymentInfoService {
 	Result add(CreatePaymentInfoRequest createPaymentInfoRequest);
 	Result delete(DeletePaymentInfoRequest deletePaymentInfoRequest);
 	Result update(UpdatePaymentInfoRequest updatePaymentInfoRequest);
-	
-	void save(CreatePaymentInfoRequest paymentInfo);
+
 	
 	DataResult<List<ListPaymentInfoDto>> getAll();
+	
+	
+	void save(CreatePaymentInfoRequest paymentInfo);
 	
 }

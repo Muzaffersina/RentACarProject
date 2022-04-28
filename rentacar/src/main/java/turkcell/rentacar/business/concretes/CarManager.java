@@ -56,7 +56,7 @@ public class CarManager implements CarService {
 	@Override
 	public DataResult<List<ListCarDto>> getAll() {
 
-		var result = this.carDao.findAll();
+		List<Car> result = this.carDao.findAll();
 
 		List<ListCarDto> response = result.stream()
 				.map(car -> this.modelMapperService.forDto().map(car, ListCarDto.class)).collect(Collectors.toList());
@@ -136,7 +136,7 @@ public class CarManager implements CarService {
 
 		checkCarExist(carId);
 
-		var result = this.carDao.getByCarId(carId);
+		Car result = this.carDao.getByCarId(carId);
 		ListCarDto response = this.modelMapperService.forDto().map(result, ListCarDto.class);
 
 		return new SuccessDataResult<ListCarDto>(response, Messages.CARFOUND);
@@ -156,7 +156,7 @@ public class CarManager implements CarService {
 	@Override
 	public boolean checkCarExist(int carId) {
 		
-		var result = this.carDao.getByCarId(carId);
+		Car result = this.carDao.getByCarId(carId);
 		if (result != null) {
 			return true;
 		}
@@ -168,17 +168,17 @@ public class CarManager implements CarService {
 
 		checkCarExist(carId);
 
-		var car = this.carDao.getByCarId(carId);
+		Car car = this.carDao.getByCarId(carId);
 		double price = car.getDailyPrice();
 		return price;
 	}
 
-	@Override
+	@Override	
 	public double checkDailyKm(int carId) {
 		
 		checkCarExist(carId);
 
-		var car = this.carDao.getByCarId(carId);
+		Car car = this.carDao.getByCarId(carId);
 		double dailkKm = car.getDailyKm();
 		return dailkKm;
 	}
@@ -208,7 +208,7 @@ public class CarManager implements CarService {
 	@Override
 	public void updateCarKm(int carId, int lastKm) {
 
-		var car = this.carDao.getById(carId);
+		Car car = this.carDao.getById(carId);
 		car.setCarTotalKm(lastKm);
 	}
 

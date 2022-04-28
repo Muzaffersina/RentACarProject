@@ -17,7 +17,6 @@ public interface IndividualCustomerService {
 	DataResult<List<ListIndividualCustomerDto>> getAll();
 	DataResult<ListIndividualCustomerDto> getById(int id);
 	
-	boolean checkIndividualCustomerExist(int id);
-	boolean checkIndividualCustomerIdendityNumber(int idendityNumber);
+
 	
 }

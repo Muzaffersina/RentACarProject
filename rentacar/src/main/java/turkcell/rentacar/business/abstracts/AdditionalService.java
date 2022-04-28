@@ -26,5 +26,5 @@ public interface AdditionalService {
 	double calculateAdditionalServicePrice(List<Integer> additionalServiceId);
 	void checkAllAdditional(List<Integer> additionalIds);
 	boolean checkAdditionalExist(int additionalId);
-	boolean checkAdditionalNameExist(String additionalName);
+
 }

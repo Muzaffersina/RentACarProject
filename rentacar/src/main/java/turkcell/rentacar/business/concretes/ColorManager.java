@@ -44,7 +44,7 @@ public class ColorManager implements ColorService {
 	@Override
 	public DataResult<List<ListColorDto>> getAll() {
 		
-		var result = this.colorDao.findAll();		
+		List<Color> result = this.colorDao.findAll();		
 		List<ListColorDto> response = result.stream()
 				.map(color -> this.modelMapperService.forDto().map(color, ListColorDto.class))
 				.collect(Collectors.toList());
@@ -117,7 +117,7 @@ public class ColorManager implements ColorService {
 		
 		checkColorExist(colorId);
 		
-		var result = this.colorDao.getByColorId(colorId);		
+		Color result = this.colorDao.getByColorId(colorId);		
 		ListColorDto response = this.modelMapperService.forDto().map(result, ListColorDto.class);
 		
 		return new SuccessDataResult<ListColorDto>(response,Messages.COLORFOUND);
@@ -127,7 +127,7 @@ public class ColorManager implements ColorService {
 	@Override
 	public boolean checkColorNameExist(String colorName)  {
 		
-		var result = this.colorDao.getByColorName(colorName);
+		Color result = this.colorDao.getByColorName(colorName);
 		if (result == null) {
 			return true;
 		}
@@ -136,7 +136,7 @@ public class ColorManager implements ColorService {
 	@Override
 	public boolean checkColorExist(int colorId) {
 		
-		var result = this.colorDao.getByColorId(colorId);
+		Color result = this.colorDao.getByColorId(colorId);
 		if(result !=null) {
 			return true;
 		}

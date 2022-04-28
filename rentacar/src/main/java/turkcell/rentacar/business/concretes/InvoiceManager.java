@@ -25,6 +25,7 @@ import turkcell.rentacar.core.utilities.results.SuccessDataResult;
 import turkcell.rentacar.core.utilities.results.SuccessResult;
 import turkcell.rentacar.dataAccess.abstracts.InvoiceDao;
 import turkcell.rentacar.entities.concretes.Invoice;
+import turkcell.rentacar.entities.concretes.Rental;
 
 @Service
 public class InvoiceManager implements InvoiceService {
@@ -48,7 +49,7 @@ public class InvoiceManager implements InvoiceService {
 
 	@Override
 	public Result add(CreateInvoiceRequest createInvoiceRequest) {
-		//iş kuralları
+		
 		
 		this.rentalService.checkRentCarExist(createInvoiceRequest.getRentalId());
 		
@@ -79,12 +80,12 @@ public class InvoiceManager implements InvoiceService {
 	@Override
 	public DataResult<List<ListInvoiceDto>> getAll() {
 
-		var result = this.invoiceDao.findAll();
+		List<Invoice> result = this.invoiceDao.findAll();
 		List<ListInvoiceDto> response = result.stream()
 				.map(invoice -> this.modelMapperService.forDto().map(invoice, ListInvoiceDto.class))
 				.collect(Collectors.toList());
 
-		return new SuccessDataResult<List<ListInvoiceDto>>(response,Messages.INVOICEUPDATE);
+		return new SuccessDataResult<List<ListInvoiceDto>>(response,Messages.INVOICELIST);
 	}
 
 	@Override
@@ -95,8 +96,9 @@ public class InvoiceManager implements InvoiceService {
 				.map(invoice -> this.modelMapperService.forDto().map(invoice, ListInvoiceDto.class))
 				.collect(Collectors.toList());
 		
-		return new SuccessDataResult<List<ListInvoiceDto>>(response,Messages.INVOICELISTFORPRICE);
+		return new SuccessDataResult<List<ListInvoiceDto>>(response,Messages.INVOICELISTFORDATE);
 	}
+
 
 	@Override
 	public DataResult<List<ListInvoiceDto>> getByCustomerId(int customerId) {
@@ -111,30 +113,26 @@ public class InvoiceManager implements InvoiceService {
 		return new SuccessDataResult<List<ListInvoiceDto>>(response,Messages.INVOICEFOUND);
 	}
 
-	@Override
-	public boolean checkInvoiceExist(int invoiceId) {
 
-		var result = this.invoiceDao.existsById(invoiceId);
-		if (result) {
+	private boolean checkInvoiceExist(int invoiceId) {
+
+		if (this.invoiceDao.existsById(invoiceId)) {
 			return true;
 		}
 		throw new BusinessException(Messages.INVOICENOTFOUND);
 	}
 
 	
-	public double calculatorTotalPrice(int rentalId) {
+	private double calculatorTotalPrice(int rentalId) {
 
-		var returnedRental = this.rentalService.returnRental(rentalId);
 
-		return returnedRental.getTotalPrice();
+		return this.rentalService.returnRental(rentalId).getTotalPrice();
 	}
 
 	
-	public long calculatorRentalDays(int rentalId) {
+	private long calculatorRentalDays(int rentalId) {
 		
-		var returnedRental = this.rentalService.returnRental(rentalId);
-		
-		long daysBetween =  ChronoUnit.DAYS.between(returnedRental.getRentalDate(), returnedRental.getReturnDate());
+		long daysBetween =  ChronoUnit.DAYS.between(this.rentalService.returnRental(rentalId).getRentalDate(), this.rentalService.returnRental(rentalId).getReturnDate());
 		
 		return daysBetween;
 	}

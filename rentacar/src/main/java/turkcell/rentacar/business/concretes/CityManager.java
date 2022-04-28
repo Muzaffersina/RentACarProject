@@ -116,7 +116,7 @@ public class CityManager implements CityService {
 	public DataResult<ListCityDto> getById(int cityId){
 		checkCityExist(cityId);
 
-		var result = this.cityDao.getById(cityId);
+		City result = this.cityDao.getById(cityId);
 		ListCityDto response = this.modelMapperService.forDto().map(result, ListCityDto.class);
 
 		return new SuccessDataResult<ListCityDto>(response,Messages.CITYFOUND);
@@ -134,7 +134,7 @@ public class CityManager implements CityService {
 	@Override
 	public boolean checkCityNameExist(String cityName) {
 
-		var result = this.cityDao.getByCityName(cityName);
+		City result = this.cityDao.getByCityName(cityName);
 		if (result == null) {
 			return true;
 		}

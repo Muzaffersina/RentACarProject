@@ -17,10 +17,9 @@ public interface OrderedAdditionalService {
 	DataResult<List<ListOrderedAdditionalDto>> getAll();
 	DataResult<List<ListOrderedAdditionalDto>> getByAdditional_AdditionalId(int additionalId);
 	
-	boolean checkAdditionalId(int additionalId);
 	boolean checkUsedAdditionalId(int additionalId);
 	
 	
 	
-	//void saveOrderedAdditional(List<Integer> additionalIds, int rentalId);
+	void saveOrderedAdditional(List<Integer> additionalIds, int rentalId);
 }

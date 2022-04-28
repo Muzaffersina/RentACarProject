@@ -22,7 +22,7 @@ public interface CarDamageService {
 	DataResult<ListCarDamageDto> getByCarDamageId(int carDamageId);
 	DataResult<List<ListCarDamageDto>> getAllByCarId(int carId);
 	
-	// getByCarId ye gore yapılabilir ******
+
 	boolean checkCarDamageExistForRental(int carId,LocalDate createdDate);
 
 }

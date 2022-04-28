@@ -1,5 +1,6 @@
 package turkcell.rentacar.business.abstracts;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
@@ -14,12 +15,12 @@ import turkcell.rentacar.core.utilities.results.Result;
 import turkcell.rentacar.entities.concretes.Rental;
 
 public interface RentalService {
-	Result addIndividualCustomer(CreateRentalRequest createRentRequest);
-	Result addCorporateCustomer(CreateRentalRequest createRentRequest);
-	// Ind ve Corp musteriler icin farklı add
+	DataResult<Integer> addIndividualCustomer(CreateRentalRequest createRentRequest);
+	DataResult<Integer> addCorporateCustomer(CreateRentalRequest createRentRequest);
+
 	Result delete(DeleteRentalRequest deleteRentRequest) ;
-	Result update(UpdateRentalRequest updateRentRequest);
-	// Ind ve Corp musteriler icin farklı add
+	DataResult<Integer> update(UpdateRentalRequest updateRentRequest);
+	
 		
 	DataResult<List<ListRentDto>> getAll();
 	DataResult<List<ListRentDto>> getAllPaged(int pageNo , int pageSize);
@@ -34,6 +35,8 @@ public interface RentalService {
 	boolean checkCarUsed(int carId);	
 	boolean checkCustomerUsed(int customerId);	
 	Rental returnRental(int rentalId);
+	double extraPriceCal(int rentalId, List<Integer> additionalServiceId);
+	boolean checkReturnedInTime(int rentalId, LocalDate returnedTime);
 	
 }
 
